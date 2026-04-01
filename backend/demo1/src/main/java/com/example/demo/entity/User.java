@@ -26,6 +26,8 @@ public class User {
 
     private String passwordHash;
 
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(20)")
     private Role role;
 
     private String email;

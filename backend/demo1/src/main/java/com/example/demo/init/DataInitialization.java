@@ -27,6 +27,8 @@ public class DataInitialization implements CommandLineRunner {
             admin.setRole(Role.ADMIN);
             admin.setUserName("admin");
             admin.setPasswordHash("Admin@123!");
+            admin.setUserName("Library Admin");
+
             userService.addUser(admin);
         }else{
             log("Admin existed");
