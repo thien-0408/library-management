@@ -34,4 +34,7 @@ public class User {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    private String refreshToken;
+    private LocalDateTime tokenExpireTime;
 }

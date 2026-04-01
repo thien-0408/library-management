@@ -18,10 +18,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.util.Base64;
+import java.util.UUID;
 
 @Service
 @Builder
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService{
     UserMapper mapper;
@@ -46,6 +49,38 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
     @Override
     public TokenResponse login(LoginDto request) {
-        return null;
+        User user = repo.findByUserName(request.getUserName()).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
+        if(!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())){
+            throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
+        return createTokenResponse(user);
+    }
+
+    private TokenResponse createTokenResponse(User user){
+        String accessToken = jwtService.createToken(user);
+        String refreshToken = generateAndSetRefreshToken(user);
+        return TokenResponse.builder().accessToken(accessToken).refreshToken(refreshToken).build();
+    }
+    //Validate token
+    private User validateRefreshToken(UUID userId, String refreshToken){
+        User user = repo.findById(userId).orElse(null);
+        if(user == null || user.getRefreshToken() == null
+                || !user.getRefreshToken().equals(refreshToken) || user.getTokenExpireTime().isBefore(LocalDateTime.now())){
+            return null;
+        }
+        return user;
+    }
+    private String generateAndSetRefreshToken(User user){
+        String refreshToken = generateRefreshTokenString();
+        user.setRefreshToken(refreshToken);
+        user.setTokenExpireTime(LocalDateTime.now().plusDays(1));
+        repo.save(user);
+        return refreshToken;
+    }
+    //Generate
+    private String generateRefreshTokenString(){
+        byte[] random = new byte[64];
+        secureRandom.nextBytes(random);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(random);
     }
 }
