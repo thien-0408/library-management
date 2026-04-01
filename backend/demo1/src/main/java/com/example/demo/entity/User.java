@@ -3,7 +3,9 @@ package com.example.demo.entity;
 import com.example.demo.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -18,7 +20,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String userName;
+    private String userName; //for login //login using irn or custom string
+
+    private String fullName;
 
     private String passwordHash;
 
@@ -27,4 +31,7 @@ public class User {
     private String email;
 
     private String avatarUrl;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 }

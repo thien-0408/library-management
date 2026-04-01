@@ -4,13 +4,16 @@ import com.example.demo.dto.token.TokenResponse;
 import com.example.demo.dto.user.LoginDto;
 import com.example.demo.dto.user.RegisterDto;
 import com.example.demo.entity.User;
+import com.example.demo.enums.ErrorCode;
 import com.example.demo.enums.Role;
+import com.example.demo.exception.AppException;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +36,12 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         User user = mapper.toUser(request);
         user.setRole(Role.STUDENT);
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-        User savedUser = repo.save(user);
-        return mapper.toRegisterResponse(savedUser);
+        try{
+            User savedUser = repo.save(user);
+            return mapper.toRegisterResponse(savedUser);
+        }catch (DataIntegrityViolationException e){
+            throw new AppException(ErrorCode.USER_EXISTED);
+        }
     }
 
     @Override
