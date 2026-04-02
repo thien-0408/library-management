@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import static java.rmi.server.LogStream.log;
@@ -20,14 +21,14 @@ import static java.rmi.server.LogStream.log;
 public class DataInitialization implements CommandLineRunner {
     private final UserService userService;
     private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
     @Override
     public void run(String... args) throws Exception {
         if(userRepository.count() == 0){
             User admin = new User();
             admin.setRole(Role.ADMIN);
-            admin.setUserName("admin");
-            admin.setPasswordHash("Admin@123!");
-            admin.setUserName("Library Admin");
+            admin.setEmail("adminlib@gmail.com");
+            admin.setPasswordHash(encoder.encode("Admin@123!"));
 
             userService.addUser(admin);
         }else{

@@ -20,7 +20,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String userName; //for login //login using irn or custom string
+    private String email;
 
     private String fullName;
 
@@ -30,7 +30,6 @@ public class User {
     @Column(columnDefinition = "VARCHAR(20)")
     private Role role;
 
-    private String email;
 
     private String avatarUrl;
 
