@@ -1,11 +1,13 @@
 package com.example.demo.entity;
 
 import com.example.demo.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -38,4 +40,8 @@ public class User {
 
     private String refreshToken;
     private LocalDateTime tokenExpireTime;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<BorrowBookRequest> bookRequests;
 }

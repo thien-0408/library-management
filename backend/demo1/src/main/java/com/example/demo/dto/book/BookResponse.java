@@ -1,6 +1,7 @@
 package com.example.demo.dto.book;
 
 import com.example.demo.enums.BookStatus;
+import com.example.demo.enums.DocumentType;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
 
@@ -21,4 +22,5 @@ public class BookResponse {
     Integer availableCopies;
     String imageUrl;
     BookStatus status;
+    DocumentType documentType;
 }

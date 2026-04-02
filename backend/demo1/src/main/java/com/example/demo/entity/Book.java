@@ -1,12 +1,15 @@
 package com.example.demo.entity;
 
 import com.example.demo.enums.BookStatus;
+import com.example.demo.enums.DocumentType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -42,4 +45,12 @@ public class Book {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     BookStatus status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    DocumentType documentType;
+
+    @OneToMany(mappedBy = "book")
+    @JsonIgnore
+    private List<BorrowBookRequest> pendingRequests;
 }

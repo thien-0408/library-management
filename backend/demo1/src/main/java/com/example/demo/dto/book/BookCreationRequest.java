@@ -1,22 +1,22 @@
 package com.example.demo.dto.book;
 
 import com.example.demo.enums.BookStatus;
+import com.example.demo.enums.DocumentType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.print.Doc;
 import java.util.UUID;
 
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookCreationRequest {
     @NotNull
@@ -24,13 +24,13 @@ public class BookCreationRequest {
     String author;
     String isbn;
 
-    @Size(min = 1, message = "Invalid year of publication")
+    @Min(value = 1, message = "Invalid year of publication")
     Integer yearOfPublication;
 
     @NotNull
     String category;
 
-    @Size(min = 0,message = "Number of copies can not be negative")
+    @Min(value = 0,message = "Number of copies can not be negative")
     Integer availableCopies;
 
     MultipartFile image;
@@ -38,4 +38,6 @@ public class BookCreationRequest {
     @Enumerated(EnumType.STRING)
     @NotNull
     BookStatus status;
+    @Enumerated(EnumType.STRING)
+    DocumentType documentType;
 }
