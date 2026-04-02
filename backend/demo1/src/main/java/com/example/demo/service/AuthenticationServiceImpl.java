@@ -38,6 +38,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     public RegisterDto register(RegisterDto request) {
         User user = mapper.toUser(request);
         user.setRole(Role.STUDENT);
+        user.setFullName(request.getFullName());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         try{
             User savedUser = repo.save(user);

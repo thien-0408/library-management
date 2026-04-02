@@ -48,7 +48,7 @@ public class BorrowBookRequestServiceImpl implements  BorrowBookRequestService{
         BorrowBookRequest newBookRequest = new BorrowBookRequest();
         newBookRequest.setUser(user);
         newBookRequest.setBook(book);
-        if (newBookRequest.getBook().getDocumentType() == DocumentType.DOCUMENT){
+        if (newBookRequest.getBook().getDocumentType() == DocumentType.BOOK){
             newBookRequest.setStatus(BookPendingStatus.APPROVED);
             book.setAvailableCopies(book.getAvailableCopies() - 1);
             bookRepository.save(book);

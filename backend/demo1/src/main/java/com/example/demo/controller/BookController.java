@@ -57,9 +57,9 @@ public class BookController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public  ApiResponse<BookResponse> createBook(
             @RequestParam("title") String title,
-            @RequestParam("author") String author,
+            @RequestParam(value = "author", required = false) String author,
             @RequestParam("isbn") String isbn,
-            @RequestParam("yearOfPublication") Integer yearOfPublication,
+            @RequestParam(value = "yearOfPublication", required = false) Integer yearOfPublication,
             @RequestParam("category") String category,
             @RequestParam("availableCopies") Integer availableCopies,
             @RequestParam("status") BookStatus status,
