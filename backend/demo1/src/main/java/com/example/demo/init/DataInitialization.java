@@ -12,12 +12,10 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.RoomService;
 import com.example.demo.service.TimeSlotService;
 import com.example.demo.service.UserService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
@@ -38,9 +36,8 @@ public class DataInitialization implements CommandLineRunner {
         if(userRepository.count() == 0){
             User admin = new User();
             admin.setRole(Role.ADMIN);
-            admin.setUserName("admin");
-            admin.setPasswordHash("Admin@123!");
-            admin.setUserName("Library Admin");
+            admin.setEmail("adminlib@gmail.com");
+            admin.setPasswordHash(encoder.encode("Admin@123!"));
 
             userService.addUser(admin);
         }else{

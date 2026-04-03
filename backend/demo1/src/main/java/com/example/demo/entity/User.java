@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import com.example.demo.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,7 +22,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String userName; //for login //login using irn or custom string
+    @Column(unique = true)
+    private String email;
 
     private String fullName;
 
@@ -31,7 +33,6 @@ public class User {
     @Column(columnDefinition = "VARCHAR(20)")
     private Role role;
 
-    private String email;
 
     private String avatarUrl;
 

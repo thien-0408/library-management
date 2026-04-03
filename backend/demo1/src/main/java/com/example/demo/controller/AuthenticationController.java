@@ -25,11 +25,13 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ApiResponse<RegisterDto> register(@RequestBody @Valid RegisterDto request){
-        return ApiResponse.<RegisterDto>builder().result(authenticationService.register(request)).message("Account created").build();
+        return ApiResponse.<RegisterDto>builder()
+        .result(authenticationService.register(request)).message("Account created").build();
     }
 
     @PostMapping("/login")
     public ApiResponse<TokenResponse> login(@RequestBody @Valid LoginDto request){
-        return ApiResponse.<TokenResponse>builder().result(authenticationService.login(request)).message("Login success").build();
+        return ApiResponse.<TokenResponse>builder()
+        .result(authenticationService.login(request)).message("Login success").build();
     }
 }
