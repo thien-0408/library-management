@@ -42,7 +42,6 @@ public class User {
     private String refreshToken;
     private LocalDateTime tokenExpireTime;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<BorrowBookRequest> bookRequests;
+    @OneToMany(mappedBy = "user")
+    private List<RoomReservation> reservations;
 }
