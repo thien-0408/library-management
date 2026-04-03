@@ -4,7 +4,6 @@ import com.example.demo.dto.borrowBook.BorrowBookCreateRequest;
 import com.example.demo.dto.borrowBook.BorrowBookResponse;
 import com.example.demo.dto.borrowBook.BorrowBookUpdateRequest;
 import com.example.demo.entity.ApiResponse;
-import com.example.demo.entity.BorrowBookRequest;
 import com.example.demo.enums.BookPendingStatus;
 import com.example.demo.service.BorrowBookRequestService;
 import lombok.AccessLevel;

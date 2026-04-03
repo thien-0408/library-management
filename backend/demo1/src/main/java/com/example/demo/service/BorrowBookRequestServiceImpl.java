@@ -1,11 +1,13 @@
 package com.example.demo.service;
 
+import com.example.demo.common.validator.BookValidator;
 import com.example.demo.dto.borrowBook.BorrowBookCreateRequest;
 import com.example.demo.dto.borrowBook.BorrowBookResponse;
 import com.example.demo.dto.borrowBook.BorrowBookUpdateRequest;
 import com.example.demo.entity.Book;
 import com.example.demo.entity.BorrowBookRequest;
 import com.example.demo.enums.BookPendingStatus;
+import com.example.demo.enums.BookStatus;
 import com.example.demo.enums.DocumentType;
 import com.example.demo.enums.ErrorCode;
 import com.example.demo.exception.AppException;
@@ -31,6 +33,7 @@ public class BorrowBookRequestServiceImpl implements  BorrowBookRequestService{
     BookRepository bookRepository;
     BorrowBookMapper borrowBookMapper;
     UserRepository userRepository;
+    BookValidator bookValidator;
 
     public List<BorrowBookResponse> getBorrowBookRequests(BookPendingStatus status ) {
         Specification<BorrowBookRequest> spec = Specification.where(null);
@@ -43,19 +46,29 @@ public class BorrowBookRequestServiceImpl implements  BorrowBookRequestService{
 
     @Transactional
     public BorrowBookResponse createBorrowBookRequest(BorrowBookCreateRequest request) {
-        var user = userRepository.findById(request.getUserId()).orElseThrow(()->new AppException(ErrorCode.USER_NOT_FOUND));
-        var book = bookRepository.findById(request.getBookId()).orElseThrow(()->new AppException(ErrorCode.BOOK_NOT_FOUND));
+        var user = userRepository.findByEmail(request.getUserEmail()).orElseThrow(()->new AppException(ErrorCode.USER_NOT_FOUND));
+        var book = bookRepository.findByIsbn(request.getBookIsbn()).orElseThrow(()->new AppException(ErrorCode.BOOK_NOT_FOUND));
         BorrowBookRequest newBookRequest = new BorrowBookRequest();
+
+        if (book.getStatus() == BookStatus.NOT_AVAILABLE) {
+            throw new AppException(ErrorCode.OUT_OF_STOCK);
+        }
         newBookRequest.setUser(user);
         newBookRequest.setBook(book);
-        if (newBookRequest.getBook().getDocumentType() == DocumentType.DOCUMENT){
+
+        if (newBookRequest.getBook().getDocumentType() == DocumentType.BOOK){
             newBookRequest.setStatus(BookPendingStatus.APPROVED);
             book.setAvailableCopies(book.getAvailableCopies() - 1);
             bookRepository.save(book);
         } else {
             newBookRequest.setStatus(BookPendingStatus.PENDING);
         }
-        return borrowBookMapper.toBorrowBookResponse(newBookRequest);
+        bookValidator.validateBookAvailability(book);
+        borrowBookRequestRepository.save(newBookRequest);
+        BorrowBookResponse response = borrowBookMapper.toBorrowBookResponse(newBookRequest);
+        response.setUserName(newBookRequest.getUser().getUserName());
+        response.setBookTitle(newBookRequest.getBook().getTitle());
+        return response;
     }
 
     @Transactional

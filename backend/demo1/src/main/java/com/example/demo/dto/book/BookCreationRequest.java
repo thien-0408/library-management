@@ -36,8 +36,5 @@ public class BookCreationRequest {
     MultipartFile image;
 
     @Enumerated(EnumType.STRING)
-    @NotNull
-    BookStatus status;
-    @Enumerated(EnumType.STRING)
     DocumentType documentType;
 }

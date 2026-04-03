@@ -12,6 +12,7 @@ public enum ErrorCode {
     BOOK_EXISTED(2001, "Book existed", HttpStatus.BAD_REQUEST),
     BOOK_NOT_FOUND(2004, "Book not found", HttpStatus.NOT_FOUND),
     OUT_OF_STOCK(2005, "Out of stock", HttpStatus.BAD_REQUEST),
+    INVALID_BOOK_COPIES(2006, "Invalid book copies", HttpStatus.BAD_REQUEST),
     BOOK_REQUEST_NOT_FOUND(3004, "Book request not found", HttpStatus.NOT_FOUND);
     ErrorCode(int code, String message, HttpStatus statusCode){
         this.code = code;
