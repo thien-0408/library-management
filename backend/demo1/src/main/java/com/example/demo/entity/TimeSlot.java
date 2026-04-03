@@ -1,40 +1,36 @@
 package com.example.demo.entity;
 
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
-
 @Entity
-@Table(name = "rooms")
+@Table(name = "time_slots")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
 @Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class Room {
+public class TimeSlot {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     UUID id;
 
-    @NotNull(message = "Room name can not be null")
-    @Column(nullable = false, unique = true)
-    String name;
+    @Column(columnDefinition = "time",  nullable = false)
+    @NotNull(message = "Start time can not be null")
+    LocalTime startTime;
 
-    private String description;
-
-    @Min(value = 0, message = "Number of seats can not be negative")
-    @Column(nullable = false)
-    int capacity;
+    @Column(columnDefinition = "time",  nullable = false)
+    @NotNull(message = "End time can not be null")
+    LocalTime endTime;
 
     @CreationTimestamp
     LocalDateTime createdAt;
@@ -42,6 +38,6 @@ public class Room {
     @UpdateTimestamp
     LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "timeSlot")
     private List<RoomReservation> reservations;
 }

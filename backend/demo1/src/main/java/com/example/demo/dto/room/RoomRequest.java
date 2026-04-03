@@ -14,6 +14,5 @@ public class RoomRequest {
     String name;
     String description;
     @Size(min = 0,message = "Number of seats can not be negative")
-    int numberOfSeats;
-
+    int capacity;
 }

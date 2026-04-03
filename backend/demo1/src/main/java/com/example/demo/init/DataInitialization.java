@@ -1,11 +1,16 @@
 package com.example.demo.init;
 
 import com.example.demo.dto.room.RoomRequest;
+import com.example.demo.dto.timeSlot.TimeSlotRequest;
 import com.example.demo.entity.Room;
+import com.example.demo.entity.TimeSlot;
 import com.example.demo.entity.User;
 import com.example.demo.enums.Role;
+import com.example.demo.repository.RoomRepository;
+import com.example.demo.repository.TimeSlotRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.RoomService;
+import com.example.demo.service.TimeSlotService;
 import com.example.demo.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -15,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalTime;
 import java.util.List;
 
 import static java.rmi.server.LogStream.log;
@@ -26,6 +32,7 @@ public class DataInitialization implements CommandLineRunner {
     private final UserService userService;
     private final UserRepository userRepository;
     private final RoomService roomService;
+    private final TimeSlotService timeSlotService;
     @Override
     public void run(String... args) throws Exception {
         if(userRepository.count() == 0){
@@ -55,6 +62,14 @@ public class DataInitialization implements CommandLineRunner {
             for(RoomRequest room : rooms){
                 roomService.createRoom(room);
             }
+        }
+
+        for (int hour = 7; hour < 16; hour++) {
+            TimeSlotRequest request = TimeSlotRequest.builder()
+                    .startTime(LocalTime.of(hour, 0))
+                    .endTime(LocalTime.of(hour + 1, 0))
+                    .build();
+            timeSlotService.createTimeSlot(request);
         }
     }
 }
