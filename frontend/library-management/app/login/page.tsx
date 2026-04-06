@@ -130,12 +130,6 @@ export default function LoginPage() {
                   <label className="block text-sm font-semibold text-gray-800">
                     Password
                   </label>
-                  <Link
-                    href="#"
-                    className="text-sm text-[#DC2626] hover:underline"
-                  >
-                    Forgot Password?
-                  </Link>
                 </div>
                 <input
                   type="password"

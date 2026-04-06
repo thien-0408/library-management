@@ -45,23 +45,28 @@ public class BookServiceImpl implements BookService {
         Specification<Book> spec = Specification.where(null);
 
         if (isbn != null && !isbn.isEmpty()) {
-            spec = spec.and(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("isbn"), isbn)));
+            spec = spec.and(((root, query,
+                              criteriaBuilder) -> criteriaBuilder.equal(root.get("isbn"), isbn)));
         }
 
         if ( title != null && !title.isEmpty()) {
-            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower((root.get("title"))), "%" + title + "%"));
+            spec = spec.and((root, query, criteriaBuilder)
+                    -> criteriaBuilder.like(criteriaBuilder.lower((root.get("title"))), "%" + title + "%"));
         }
 
         if ( author != null && !author.isEmpty()) {
-            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower((root.get("author"))), "%" + author + "%"));
+            spec = spec.and((root, query, criteriaBuilder)
+                    -> criteriaBuilder.like(criteriaBuilder.lower((root.get("author"))), "%" + author + "%"));
         }
 
         if (category != null && !category.isEmpty()) {
-            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("category"), category));
+            spec = spec.and((root, query, criteriaBuilder)
+                    -> criteriaBuilder.equal(root.get("category"), category));
         }
 
         if (documentType != null) {
-            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("documentType"), documentType));
+            spec = spec.and((root, query, criteriaBuilder)
+                    -> criteriaBuilder.equal(root.get("documentType"), documentType));
         }
 
         List<Book> books = bookRepository.findAll(spec);
