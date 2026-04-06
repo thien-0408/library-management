@@ -38,6 +38,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     public RegisterDto register(RegisterDto request) {
         User user = mapper.toUser(request);
         user.setRole(Role.STUDENT);
+        user.setFullName(request.getFullName());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         try{
             User savedUser = repo.save(user);
@@ -49,7 +50,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
     @Override
     public TokenResponse login(LoginDto request) {
-        User user = repo.findByUserName(request.getUserName()).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
+        User user = repo.findUserByEmail(request.getEmail()).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
         if(!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())){
             throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
         }

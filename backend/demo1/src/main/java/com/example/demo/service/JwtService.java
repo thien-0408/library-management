@@ -25,7 +25,7 @@ public class JwtService {
 
     public String createToken(User user){
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-        return Jwts.builder().subject(user.getId().toString()).claim("username", user.getUserName())
+        return Jwts.builder().subject(user.getId().toString()).claim("email", user.getEmail())
                 .claim("role", user.getRole())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expireTime))

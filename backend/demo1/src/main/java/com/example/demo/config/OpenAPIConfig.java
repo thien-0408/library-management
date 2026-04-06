@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @OpenAPIDefinition(
-        info = @Info(title = "Fade Social Network API", version = "1.0", description = "API Documentation for Fade Project"),
+        info = @Info(title = "Lib Management", version = "1.0", description = "API Documentation for Lib Project"),
         security = @SecurityRequirement(name = "bearerAuth")
 )
 @SecurityScheme(

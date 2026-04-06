@@ -22,7 +22,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String userName; //for login //login using irn or custom string
+    @Column(unique = true)
+    private String email;
 
     private String fullName;
 
@@ -32,7 +33,6 @@ public class User {
     @Column(columnDefinition = "VARCHAR(20)")
     private Role role;
 
-    private String email;
 
     private String avatarUrl;
 
@@ -42,7 +42,6 @@ public class User {
     private String refreshToken;
     private LocalDateTime tokenExpireTime;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<BorrowBookRequest> bookRequests;
+    @OneToMany(mappedBy = "user")
+    private List<RoomReservation> reservations;
 }

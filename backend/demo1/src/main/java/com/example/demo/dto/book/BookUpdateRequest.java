@@ -28,6 +28,6 @@ public class BookUpdateRequest {
     MultipartFile image;
     @Enumerated(EnumType.STRING)
     BookStatus status;
-    @Enumerated
+    @Enumerated // 0 -> 1
     DocumentType documentType;
 }
