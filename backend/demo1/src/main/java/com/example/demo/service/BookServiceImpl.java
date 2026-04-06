@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
+import com.example.demo.common.validator.BookValidator;
 import com.example.demo.dto.book.BookCreationRequest;
+import com.example.demo.dto.book.BookGetRequest;
 import com.example.demo.dto.book.BookResponse;
 import com.example.demo.dto.book.BookUpdateRequest;
 import com.example.demo.entity.Book;
@@ -27,12 +29,7 @@ public class BookServiceImpl implements BookService {
     BookRepository bookRepository;
     BookMapper bookMapper;
     FileService fileService;
-
-    @Override
-    public List<BookResponse> getAllBooks() {
-        List<Book> books = bookRepository.findAll();
-        return bookMapper.toBookResponseList(books);
-    }
+    BookValidator bookValidator;
 
     @Override
     public BookResponse getBookById(UUID id) {
@@ -41,32 +38,27 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookResponse> searchBooks(String isbn, String title, String author, String category, DocumentType documentType) {
+    public List<BookResponse> searchBooks(BookGetRequest request) {
         Specification<Book> spec = Specification.where(null);
 
-        if (isbn != null && !isbn.isEmpty()) {
-            spec = spec.and(((root, query,
-                              criteriaBuilder) -> criteriaBuilder.equal(root.get("isbn"), isbn)));
+        if (request.getIsbn() != null && !request.getIsbn().isEmpty()) {
+            spec = spec.and(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("isbn"), request.getIsbn())));
         }
 
-        if ( title != null && !title.isEmpty()) {
-            spec = spec.and((root, query, criteriaBuilder)
-                    -> criteriaBuilder.like(criteriaBuilder.lower((root.get("title"))), "%" + title + "%"));
+        if ( request.getTitle() != null && !request.getTitle().isEmpty()) {
+            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower((root.get("title"))), "%" + request.getTitle() + "%"));
         }
 
-        if ( author != null && !author.isEmpty()) {
-            spec = spec.and((root, query, criteriaBuilder)
-                    -> criteriaBuilder.like(criteriaBuilder.lower((root.get("author"))), "%" + author + "%"));
+        if ( request.getAuthor() != null && !request.getAuthor().isEmpty()) {
+            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower((root.get("author"))), "%" + request.getAuthor() + "%"));
         }
 
-        if (category != null && !category.isEmpty()) {
-            spec = spec.and((root, query, criteriaBuilder)
-                    -> criteriaBuilder.equal(root.get("category"), category));
+        if (request.getCategory() != null && !request.getCategory().isEmpty()) {
+            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("category"), request.getCategory()));
         }
 
-        if (documentType != null) {
-            spec = spec.and((root, query, criteriaBuilder)
-                    -> criteriaBuilder.equal(root.get("documentType"), documentType));
+        if (request.getDocumentType() != null) {
+            spec = spec.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("documentType"), request.getDocumentType()));
         }
 
         List<Book> books = bookRepository.findAll(spec);
@@ -84,14 +76,15 @@ public class BookServiceImpl implements BookService {
             String imageUrl = fileService.uploadFile(bookCreationRequest.getImage(),"cover_images");
             newBook.setImageUrl(imageUrl);
         }
+        bookValidator.validateBookAvailability(newBook);
         newBook = bookRepository.save(newBook);
         return bookMapper.toBookResponse(newBook);
     }
 
     @Transactional
     @Override
-    public BookResponse updateBook(BookUpdateRequest bookUpdateRequest, UUID id) throws IOException {
-        Book existedBook = bookRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
+    public BookResponse updateBook(BookUpdateRequest bookUpdateRequest, String isbn) throws IOException {
+        Book existedBook = bookRepository.findByIsbn(isbn).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
         bookMapper.updateBookFromRequest(bookUpdateRequest, existedBook);
         if (bookUpdateRequest.getImage() != null && !bookUpdateRequest.getImage().isEmpty()) {
             String imageUrl = fileService.uploadFile(bookUpdateRequest.getImage(),"cover_images");
@@ -103,8 +96,8 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
-    public void deleteBook(UUID id) {
-        Book existedBook = bookRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
+    public void deleteBook(String isbn) {
+        Book existedBook = bookRepository.findByIsbn(isbn).orElseThrow(() -> new AppException(ErrorCode.BOOK_NOT_FOUND));
         bookRepository.delete(existedBook);
     }
 }

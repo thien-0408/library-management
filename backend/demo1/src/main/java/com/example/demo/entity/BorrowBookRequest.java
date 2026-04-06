@@ -27,6 +27,7 @@ public class BorrowBookRequest {
     @JoinColumn(name = "book_id")
     Book book;
 
+    @Enumerated(EnumType.STRING)
     BookPendingStatus status;
 
 }

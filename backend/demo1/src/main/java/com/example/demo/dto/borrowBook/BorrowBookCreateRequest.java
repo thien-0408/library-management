@@ -16,6 +16,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @FieldNameConstants(level = AccessLevel.PRIVATE)
 public class BorrowBookCreateRequest {
-    UUID userId;
-    UUID bookId;
+    String userEmail;
+    String bookIsbn;
 }

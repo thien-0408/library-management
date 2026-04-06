@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.book.BookCreationRequest;
+import com.example.demo.dto.book.BookGetRequest;
 import com.example.demo.dto.book.BookResponse;
 import com.example.demo.dto.book.BookUpdateRequest;
 import com.example.demo.entity.ApiResponse;
@@ -46,7 +47,8 @@ public class BookController {
             @RequestParam(required = false) String category,
             @RequestParam(required = false) DocumentType documentType) {
 
-        var result = bookService.searchBooks(isbn, title, author, category, documentType);
+        BookGetRequest request = BookGetRequest.builder().title(title).isbn(isbn).author(author).category(category).documentType(documentType).build();
+        var result = bookService.searchBooks(request);
 
         return ApiResponse.<List<BookResponse>>builder()
                 .result(result)
@@ -62,38 +64,36 @@ public class BookController {
             @RequestParam(value = "yearOfPublication", required = false) Integer yearOfPublication,
             @RequestParam("category") String category,
             @RequestParam("availableCopies") Integer availableCopies,
-            @RequestParam("status") BookStatus status,
             @RequestParam("documentType") DocumentType documentType,
             @RequestPart(value = "image",required = false) MultipartFile image
     ) throws IOException {
         BookCreationRequest request = BookCreationRequest.builder().
                 title(title).author(author).isbn(isbn).yearOfPublication(yearOfPublication)
-                .category(category).availableCopies(availableCopies).status(status).documentType(documentType).image(image).build();
+                .category(category).availableCopies(availableCopies).documentType(documentType).image(image).build();
         BookResponse result = bookService.createBook(request);
         return ApiResponse.<BookResponse>builder().result(result).message("Create book successfully").build();
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/{isbn}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<BookResponse> updateBook(@RequestParam(value = "title", required = false) String title,
                                                 @RequestParam(value = "author" ,required = false) String author,
-                                                @RequestParam(value = "isbn", required = false) String isbn,
                                                 @RequestParam(value = "yearOfPublication", required = false) Integer yearOfPublication,
                                                 @RequestParam(value = "category", required = false) String category,
                                                 @RequestParam(value = "availableCopies", required = false) Integer availableCopies,
                                                 @RequestParam(value = "status", required = false) BookStatus status,
                                                 @RequestPart(value = "image",required = false) MultipartFile image,
                                                 @RequestParam(value = "documentType", required = false) DocumentType documentType,
-                                                @PathVariable UUID id) throws IOException {
+                                                @PathVariable String isbn) throws IOException {
         BookUpdateRequest request = BookUpdateRequest.builder().
                 title(title).author(author).isbn(isbn).yearOfPublication(yearOfPublication)
                 .category(category).availableCopies(availableCopies).status(status).documentType(documentType).image(image).build();
-        BookResponse result = bookService.updateBook(request, id);
+        BookResponse result = bookService.updateBook(request, isbn);
         return ApiResponse.<BookResponse>builder().result(result).message("Update book successfully").build();
     }
 
-    @DeleteMapping("/{id}")
-    public  ApiResponse<String> deleteBook(@PathVariable UUID id) {
-        bookService.deleteBook(id);
+    @DeleteMapping("/{isbn}")
+    public  ApiResponse<String> deleteBook(@PathVariable String isbn) {
+        bookService.deleteBook(isbn);
         return ApiResponse.<String>builder().message("Delete book successfully").build();
     }
 }
