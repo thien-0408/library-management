@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+@theme {
+  --font-headline: var(--font-nunito), sans-serif;
+  --font-body: var(--font-nunito), sans-serif;
+  --font-label: var(--font-nunito), sans-serif;
+
+  --sidebar-width: 17rem;
+  --sidebar-collapsed-top: 5rem;
+
+  --shadow-sidebar: 0 18px 50px -24px rgba(17, 24, 39, 0.3);
+  --shadow-soft-card: 0 16px 40px -28px rgba(17, 24, 39, 0.2);
+
+
+  --color-primary: #DC2626;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #FEE2E2;
+  --color-on-primary-container: #991B1B;
+  
+  --color-surface: #FAFAFA;
+  --color-on-surface: #111827;
+  --color-surface-variant: #F3F4F6;
+  --color-on-surface-variant: #4B5563;
+  
+  --color-outline: #D1D5DB;
+  --color-outline-variant: #E5E7EB;
+  
+  --color-error: #DC2626;
+  --color-error-container: #FEE2E2;
+  --color-on-error-container: #991B1B;
+  
+  --color-background: #FFFFFF;
+}
+
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (min-width: 1024px) {
+  .app-shell-main {
+    margin-left: var(--sidebar-width);
+  }
+}
+
+.app-shell-content {
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .app-shell-content {
+    width: calc(100% - var(--sidebar-width));
+  }
+}
+
+.page-shell {
+  padding-top: 6.5rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 1024px) {
+  .page-shell {
+    padding-top: 2.5rem;
+  }
+}
+
+.sidebar-surface {
+  box-shadow: var(--shadow-sidebar);
+}
+
+.soft-card {
+  box-shadow: var(--shadow-soft-card);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+.scrollbar-hidden {
+  scrollbar-width: none;       
+  -ms-overflow-style: none;    
+}
+@layer utilities {
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  
+  .book-card-shadow {
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .vibrant-gradient-bg, .bg-red-gradient {
+    background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+  }
+  
+  .hover-bg-red-gradient:hover {
+    background: linear-gradient(135deg, #EF4444 0%, #B91C1C 100%);
+  }
+  
+  .vibrant-gradient-text {
+    background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
