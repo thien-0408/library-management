@@ -27,7 +27,7 @@ const renderMessage = (message: string) => {
     const href = resolveAssetUrl(part) || part;
 
     return (
-      <a key={`${part}-${index}`} href={href} target="_blank" rel="noreferrer" className="font-bold text-primary underline underline-offset-4 hover:brightness-110">
+      <a key={`${part}-${index}`} href={href} target="_blank" rel="noreferrer" className="font-black text-red-700 underline underline-offset-4 hover:text-red-800">
         Your access link here
       </a>
     );
@@ -57,17 +57,23 @@ export default function NotificationsPage() {
   };
 
   return (
-    <div className="bg-surface font-body text-on-surface min-h-screen">
+    <div className="min-h-screen bg-[#fff7f7] font-body text-slate-950">
       <Header />
-      <main className="app-shell-main app-shell-content page-shell px-6 md:px-8 xl:px-10 max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 mb-10">
+      <main className="app-shell-main app-shell-content page-shell mx-auto max-w-7xl px-5 pb-16 md:px-8 xl:px-10">
+        <div className="relative mb-8 overflow-hidden rounded-[2.25rem] border border-red-100 bg-white px-6 py-8 shadow-[0_24px_80px_-48px_rgba(153,27,27,0.45)] sm:px-8 lg:px-10">
+          <div className="absolute right-[-5rem] top-[-6rem] h-72 w-72 rounded-full bg-red-200/55 blur-3xl" />
+          <div className="relative flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="font-headline text-4xl font-extrabold tracking-tight">Notifications</h1>
-            <p className="mt-3 text-on-surface-variant text-lg">
+            <div className="inline-flex items-center gap-2 rounded-full border border-red-100 bg-red-50 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-red-700">
+              <span className="h-2 w-2 rounded-full bg-red-600" />
+              Activity center
+            </div>
+            <h1 className="mt-5 font-headline text-5xl font-black leading-[0.95] tracking-[-0.055em] text-slate-950 sm:text-6xl">Notifications</h1>
+            <p className="mt-5 max-w-2xl text-lg font-medium leading-8 text-slate-600">
               Review updates from book requests, overdue activity, and fine status changes.
             </p>
           </div>
-          <label className="inline-flex items-center gap-3 rounded-xl border border-outline-variant bg-white px-4 py-3 text-sm font-semibold shadow-sm">
+          <label className="inline-flex items-center gap-3 rounded-full border border-red-100 bg-red-50 px-5 py-3 text-sm font-black text-red-700 shadow-sm">
             <input
               type="checkbox"
               checked={unreadOnly}
@@ -76,22 +82,23 @@ export default function NotificationsPage() {
             />
             Show unread only
           </label>
+          </div>
         </div>
 
         {error && (
-          <div className="text-center py-5 bg-red-50 text-red-600 rounded-2xl mb-8 border border-red-200">
+          <div className="mb-8 rounded-[1.5rem] border border-red-100 bg-white px-6 py-5 text-center font-bold text-red-700 shadow-sm">
             <i className="fa-solid fa-triangle-exclamation mr-2"></i>
             {error}
-            <button onClick={refreshData} className="ml-4 underline text-sm">Retry</button>
+            <button onClick={refreshData} className="ml-4 text-sm font-black underline">Retry</button>
           </div>
         )}
 
         {isLoading ? (
           <ListSkeleton count={5} />
         ) : notifications.length === 0 ? (
-          <div className="rounded-2xl border border-outline-variant bg-white p-10 text-center shadow-sm">
-            <h2 className="font-headline text-2xl font-bold">No notifications found</h2>
-            <p className="mt-3 text-on-surface-variant">
+          <div className="rounded-[2rem] border border-red-100 bg-white p-10 text-center shadow-sm">
+            <h2 className="font-headline text-2xl font-black text-slate-950">No notifications found</h2>
+            <p className="mt-3 text-slate-500">
               {unreadOnly ? 'There are no unread notifications right now.' : 'You have no notifications yet.'}
             </p>
           </div>
@@ -100,25 +107,25 @@ export default function NotificationsPage() {
             {notifications.map((notification) => (
               <article
                 key={notification.id}
-                className={`rounded-2xl border bg-white p-6 shadow-sm ${
-                  notification.isRead ? 'border-outline-variant' : 'border-primary/40 bg-primary/5'
+                className={`rounded-[1.75rem] border p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-[0_18px_55px_-38px_rgba(153,27,27,0.55)] ${
+                  notification.isRead ? 'border-red-100 bg-white' : 'border-red-200 bg-red-50/70'
                 }`}
               >
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5">
                   <div className="space-y-3">
                     <div className="flex flex-wrap items-center gap-3">
-                      <span className="rounded-full bg-surface-variant px-3 py-1 text-xs font-black uppercase tracking-wider text-on-surface-variant">
+                      <span className="rounded-full bg-white px-3 py-1 text-xs font-black uppercase tracking-wider text-slate-500 ring-1 ring-red-100">
                         {notification.type}
                       </span>
-                      <span className={`text-xs font-bold uppercase tracking-wider ${notification.isRead ? 'text-on-surface-variant' : 'text-primary'}`}>
+                      <span className={`text-xs font-black uppercase tracking-wider ${notification.isRead ? 'text-slate-400' : 'text-red-700'}`}>
                         {notification.isRead ? 'Read' : 'Unread'}
                       </span>
                     </div>
                     <div>
-                      <h2 className="font-headline text-2xl font-bold">{notification.title}</h2>
-                      <p className="mt-2 text-on-surface-variant leading-relaxed">{renderMessage(notification.message)}</p>
+                      <h2 className="font-headline text-2xl font-black text-slate-950">{notification.title}</h2>
+                      <p className="mt-2 leading-relaxed text-slate-600">{renderMessage(notification.message)}</p>
                     </div>
-                    <p className="text-sm text-on-surface-variant font-medium">
+                    <p className="text-sm font-bold text-slate-400">
                       {formatDateTime(notification.createdAt)}
                     </p>
                   </div>
@@ -128,7 +135,7 @@ export default function NotificationsPage() {
                       type="button"
                       disabled={isUpdating}
                       onClick={() => void handleMarkAsRead(notification.id)}
-                      className="rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-white hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="rounded-full bg-red-600 px-4 py-2.5 text-sm font-black text-white shadow-lg shadow-red-100 hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       Mark as read
                     </button>

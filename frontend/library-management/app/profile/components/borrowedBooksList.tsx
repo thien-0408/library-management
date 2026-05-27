@@ -11,37 +11,37 @@ interface BorrowedBooksListProps {
 const BorrowedBooksList: React.FC<BorrowedBooksListProps> = ({ books, returningBookId, onReturnBook }) => {
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold font-headline flex items-center gap-3">
-          <i className="fa-solid fa-book-open text-primary"></i> My Borrowed Books
+      <div className="mb-5 flex items-center justify-between">
+        <h2 className="flex items-center gap-3 font-headline text-2xl font-black text-slate-950">
+          <span className="grid h-10 w-10 place-items-center rounded-2xl bg-red-50 text-red-600"><i className="fa-solid fa-book-open"></i></span> My Borrowed Books
         </h2>
-        <a href="#" className="text-sm font-bold text-primary hover:underline">View History</a>
+        <a href="#" className="text-sm font-black text-red-700 hover:underline">View History</a>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         {books.map((book) => (
-          <div key={book.id} className="group bg-white p-5 rounded-2xl border border-outline-variant hover:border-primary/40 hover:shadow-[0_8px_30px_rgba(220,38,38,0.1)] transition-all duration-300 flex gap-5 cursor-pointer">
-            <div className="w-20 h-28 flex-shrink-0 rounded-lg overflow-hidden shadow-sm">
+          <div key={book.id} className="group flex cursor-pointer gap-5 rounded-[1.75rem] border border-red-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-red-200 hover:shadow-[0_18px_55px_-38px_rgba(153,27,27,0.55)]">
+            <div className="h-28 w-20 flex-shrink-0 overflow-hidden rounded-xl shadow-sm ring-1 ring-red-100">
               <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
             </div>
             <div className="flex flex-col justify-between py-1">
               <div>
-                <h3 className="font-bold text-sm text-on-surface leading-tight group-hover:text-primary transition-colors line-clamp-2">
+                <h3 className="line-clamp-2 text-sm font-black leading-tight text-slate-950 transition-colors group-hover:text-red-700">
                   {book.title}
                 </h3>
-                <p className="text-xs text-on-surface-variant mt-1.5">{book.author}</p>
-                {book.isbn && <p className="text-[11px] text-on-surface-variant/70 mt-1">ISBN {book.isbn}</p>}
-                {book.borrowMode && <p className="text-[11px] font-bold text-primary mt-1">{book.borrowMode}</p>}
+                <p className="mt-1.5 text-xs text-slate-500">{book.author}</p>
+                {book.isbn && <p className="mt-1 text-[11px] text-slate-400">ISBN {book.isbn}</p>}
+                {book.borrowMode && <p className="mt-1 text-[11px] font-black text-red-700">{book.borrowMode}</p>}
               </div>
               <div className="mt-4 space-y-2">
                 {book.offlineBorrowCode && (
                   <div>
-                    <p className="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-widest">Borrow Code</p>
-                    <p className="text-sm font-bold mt-0.5 text-primary">{book.offlineBorrowCode}</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Borrow Code</p>
+                    <p className="mt-0.5 text-sm font-black text-red-700">{book.offlineBorrowCode}</p>
                   </div>
                 )}
                 {book.onlineAccessUrl && (
-                  <a href={resolveAssetUrl(book.onlineAccessUrl) || book.onlineAccessUrl} target="_blank" rel="noreferrer" className="inline-flex rounded-lg bg-primary px-3 py-2 text-xs font-bold text-white hover:brightness-110">
+                  <a href={resolveAssetUrl(book.onlineAccessUrl) || book.onlineAccessUrl} target="_blank" rel="noreferrer" className="inline-flex rounded-full bg-red-600 px-3 py-2 text-xs font-black text-white hover:bg-red-700">
                     Open Online Access
                   </a>
                 )}
@@ -50,14 +50,14 @@ const BorrowedBooksList: React.FC<BorrowedBooksListProps> = ({ books, returningB
                     type="button"
                     disabled={returningBookId === book.id}
                     onClick={() => onReturnBook(book)}
-                    className="inline-flex rounded-lg border border-primary px-3 py-2 text-xs font-bold text-primary transition hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex rounded-full border border-red-200 px-3 py-2 text-xs font-black text-red-700 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {returningBookId === book.id ? 'Returning...' : 'Return Book'}
                   </button>
                 )}
                 <div>
-                  <p className="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-widest">Due Date</p>
-                  <p className={`text-sm font-bold mt-0.5 ${book.isOverdue ? 'text-error' : 'text-primary'}`}>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Due Date</p>
+                  <p className={`mt-0.5 text-sm font-black ${book.isOverdue ? 'text-red-700' : 'text-red-600'}`}>
                     {book.dueDate} {book.isOverdue && '(Overdue)'}
                   </p>
                 </div>
@@ -72,10 +72,10 @@ const BorrowedBooksList: React.FC<BorrowedBooksListProps> = ({ books, returningB
           </div>
         ))}
 
-        <div className="group border-2 border-dashed border-outline-variant p-5 rounded-2xl flex items-center justify-center hover:bg-primary/5 hover:border-primary/50 transition-all cursor-pointer min-h-[140px]">
+        <div className="group flex min-h-[140px] cursor-pointer items-center justify-center rounded-[1.75rem] border-2 border-dashed border-red-200 bg-white/70 p-5 transition-all hover:border-red-300 hover:bg-red-50">
           <div className="text-center">
-            <i className="fa-solid fa-circle-plus text-outline-variant text-4xl mb-2 group-hover:text-primary transition-colors"></i>
-            <p className="text-sm font-bold text-on-surface-variant group-hover:text-primary transition-colors">Borrow New</p>
+            <i className="fa-solid fa-circle-plus mb-2 text-4xl text-red-200 transition-colors group-hover:text-red-600"></i>
+            <p className="text-sm font-black text-slate-500 transition-colors group-hover:text-red-700">Borrow New</p>
           </div>
         </div>
       </div>

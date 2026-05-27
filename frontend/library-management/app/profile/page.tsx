@@ -17,6 +17,15 @@ import ReservationsList from '@/app/profile/components/reservationsList';
 import PendingRequestsList from '@/app/profile/components/pendingRequestsList';
 import UpdateProfileModal from '@/app/profile/components/updateProfileModal';
 
+const getErrorMessage = (error: unknown, fallback: string) => {
+  if (error && typeof error === 'object') {
+    const maybeError = error as { data?: { message?: string }; message?: string };
+    return maybeError.data?.message || maybeError.message || fallback;
+  }
+
+  return fallback;
+};
+
 export default function ProfilePage() {
   const {
     profile,
@@ -38,8 +47,8 @@ export default function ProfilePage() {
       setIsEditModalOpen(false);
       await refreshData();
       showToast('Profile updated', 'Your profile details were saved successfully.', 'success');
-    } catch (err: any) {
-      const message = err?.data?.message || err?.message || 'Failed to update profile.';
+    } catch (err) {
+      const message = getErrorMessage(err, 'Failed to update profile.');
       showToast('Profile update failed', message, 'error');
       throw err;
     }
@@ -55,8 +64,8 @@ export default function ProfilePage() {
       await refreshData();
       showToast('Book returned', `${bookToReturn.title} was returned successfully.`, 'success');
       setBookToReturn(null);
-    } catch (err: any) {
-      const message = err?.data?.message || err?.message || 'Failed to return book.';
+    } catch (err) {
+      const message = getErrorMessage(err, 'Failed to return book.');
       showToast('Return failed', message, 'error');
     } finally {
       setReturningBookId(null);
@@ -64,15 +73,15 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="bg-surface text-on-surface min-h-screen flex flex-col font-body">
+    <div className="min-h-screen bg-[#fff7f7] font-body text-slate-950">
       <Header />
 
-      <main className="app-shell-main app-shell-content page-shell px-6 md:px-10 lg:px-14 max-w-7xl mx-auto flex-grow w-full">
+      <main className="app-shell-main app-shell-content page-shell mx-auto w-full max-w-7xl flex-grow px-5 pb-24 md:px-8 lg:px-10">
         {error && (
-            <div className="text-center py-5 bg-red-50 text-red-600 rounded-2xl mb-8 border border-red-200">
+            <div className="mb-8 rounded-[1.5rem] border border-red-100 bg-white px-6 py-5 text-center font-bold text-red-700 shadow-sm">
                 <i className="fa-solid fa-triangle-exclamation mr-2"></i>
                 {error}
-                <button onClick={refreshData} className="ml-4 underline text-sm">Retry</button>
+                <button onClick={refreshData} className="ml-4 text-sm font-black underline">Retry</button>
             </div>
         )}
 
@@ -82,9 +91,9 @@ export default function ProfilePage() {
             <>
                 <UserOverview profile={profile} onEdit={() => setIsEditModalOpen(true)} />
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
                     {/* LEFT COLUMN: BOOKS & ROOMS */}
-                    <div className="lg:col-span-2 flex flex-col gap-10">
+                    <div className="flex flex-col gap-8 lg:col-span-2">
                         <BorrowedBooksList books={borrowedBooks} returningBookId={returningBookId} onReturnBook={setBookToReturn} />
                         <ReservationsList reservations={reservations} />
                     </div>
@@ -126,16 +135,16 @@ export default function ProfilePage() {
       />
 
       {/* Bottom Navigation for Mobile */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-outline-variant flex justify-around items-center h-16 z-50">
-        <a href="/catalog" className="flex flex-col items-center justify-center gap-1 text-on-surface-variant">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-red-100 bg-white/95 shadow-[0_-12px_40px_-30px_rgba(153,27,27,0.55)] backdrop-blur md:hidden">
+        <a href="/catalog" className="flex flex-col items-center justify-center gap-1 text-slate-500">
           <i className="fa-solid fa-box-archive"></i>
           <span className="text-[10px] font-bold uppercase tracking-wider">Catalog</span>
         </a>
-        <a href="/requests" className="flex flex-col items-center justify-center gap-1 text-on-surface-variant">
+        <a href="/requests" className="flex flex-col items-center justify-center gap-1 text-slate-500">
           <i className="fa-solid fa-clipboard-list"></i>
           <span className="text-[10px] font-bold uppercase tracking-wider">Requests</span>
         </a>
-        <a href="/profile" className="flex flex-col items-center justify-center gap-1 text-primary">
+        <a href="/profile" className="flex flex-col items-center justify-center gap-1 text-red-700">
           <i className="fa-solid fa-circle-user"></i>
           <span className="text-[10px] font-bold uppercase tracking-wider">Profile</span>
         </a>

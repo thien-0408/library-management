@@ -7,7 +7,7 @@ import ConfirmModal from '@/components/confirm_modal';
 import { CardGridSkeleton } from '@/components/skeleton_loader';
 import { useToast } from '@/hooks/useToast';
 import { useAdminInventory } from '@/app/adminInventory/hooks/useAdminInventory';
-import { AddBookPayload, InventoryBook } from '@/app/adminInventory/types';
+import { AddBookPayload, InventoryBook, PendingRequest } from '@/app/adminInventory/types';
 
 // Import extracted components
 import InventoryTable from '@/app/adminInventory/components/inventoryTable';
@@ -43,14 +43,14 @@ export default function AdminInventoryPage() {
     showToast(title, description, type);
   };
 
-  const onApprove = async (req: any) => {
+  const onApprove = async (req: PendingRequest) => {
     const success = await handleApproveRequest(req);
     if (success) {
       addNotification('Request Approved', `You approved ${req.userName}'s request for "${req.bookTitle}".`, 'success');
     }
   };
 
-  const onReject = async (req: any) => {
+  const onReject = async (req: PendingRequest) => {
     const success = await handleRejectRequest(req);
     if (success) {
       addNotification('Request Rejected', `You rejected ${req.userName}'s request.`, 'error');
@@ -100,28 +100,35 @@ export default function AdminInventoryPage() {
   };
 
   return (
-    <div className="bg-surface font-body text-on-surface min-h-screen">
+    <div className="min-h-screen bg-[#fff7f7] font-body text-slate-950">
       <Header />
 
-      <main className="app-shell-main app-shell-content page-shell px-6 md:px-8 xl:px-10 max-w-[1600px] mx-auto">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-6 mb-14">
-          <div>
-            <h1 className="font-headline font-extrabold text-4xl tracking-tight text-on-surface">Catalog Management</h1>
-            <p className="text-on-surface-variant mt-3 max-w-xl text-lg font-medium leading-relaxed">
-              Manage the library's physical collection, approve borrow requests, and monitor study room capacity in real-time.
-            </p>
+      <main className="app-shell-main app-shell-content page-shell mx-auto max-w-[1600px] px-5 pb-16 md:px-8 xl:px-10">
+        <div className="relative mb-10 overflow-hidden rounded-[2.25rem] border border-red-100 bg-white px-6 py-8 shadow-[0_24px_80px_-48px_rgba(153,27,27,0.45)] sm:px-8 lg:px-10">
+          <div className="absolute right-[-5rem] top-[-6rem] h-72 w-72 rounded-full bg-red-200/55 blur-3xl" />
+          <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-red-100 bg-red-50 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-red-700">
+                <span className="h-2 w-2 rounded-full bg-red-600" />
+                Admin command
+              </div>
+              <h1 className="mt-5 font-headline text-5xl font-black leading-[0.95] tracking-[-0.055em] text-slate-950">Catalog Management</h1>
+              <p className="mt-4 max-w-2xl text-lg font-medium leading-8 text-slate-600">
+                Manage the library physical collection, approve borrow requests, and monitor study room capacity in real time.
+              </p>
+            </div>
+            <button
+              onClick={openAddModal}
+              className="flex items-center justify-center gap-2.5 rounded-full bg-red-600 px-6 py-3.5 font-black text-white shadow-lg shadow-red-200 transition-all hover:-translate-y-0.5 hover:bg-red-700 active:scale-95"
+            >
+              <i className="fa-solid fa-plus text-lg"></i>
+              <span>New Book</span>
+            </button>
           </div>
-          <button
-            onClick={openAddModal}
-            className="vibrant-gradient-bg text-white px-6 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2.5 shadow-md shadow-primary/20 hover:shadow-lg hover:brightness-110 transition-all active:scale-95"
-          >
-            <i className="fa-solid fa-plus text-lg"></i>
-            <span>New Book</span>
-          </button>
         </div>
 
         {error && (
-            <div className="text-center py-5 bg-red-50 text-red-600 rounded-2xl mb-8 border border-red-200">
+            <div className="mb-8 rounded-[1.5rem] border border-red-100 bg-white px-6 py-5 text-center font-bold text-red-700 shadow-sm">
                 <i className="fa-solid fa-triangle-exclamation mr-2"></i>
                 {error}
             </div>
@@ -130,9 +137,9 @@ export default function AdminInventoryPage() {
         {isLoading ? (
             <CardGridSkeleton count={6} />
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
             {/* LEFT COLUMN */}
-            <div className="col-span-12 lg:col-span-8 space-y-10">
+            <div className="col-span-12 space-y-8 lg:col-span-8">
               <InventoryTable inventory={inventory} onEditBook={openEditModal} onDeleteBook={setBookToDelete} />
               <RoomStateViewer
                 rooms={rooms}
@@ -145,13 +152,13 @@ export default function AdminInventoryPage() {
             </div>
 
             {/* RIGHT COLUMN */}
-            <div className="col-span-12 lg:col-span-4 space-y-10">
+            <div className="col-span-12 space-y-8 lg:col-span-4">
               <RequestQueue requests={requests} onApprove={onApprove} onReject={onReject} />
               
               {/* Traffic Chart */}
-              <div className="vibrant-gradient-bg rounded-2xl p-8 text-white shadow-xl relative overflow-hidden group">
+              <div className="group relative overflow-hidden rounded-[2rem] bg-red-600 p-8 text-white shadow-xl shadow-red-200">
                   <div className="relative z-10">
-                      <h4 className="font-headline font-bold text-xl">Today's Traffic</h4>
+                       <h4 className="font-headline font-bold text-xl">Today&apos;s Traffic</h4>
                       <p className="text-white/80 text-sm mt-1 font-medium">Peak hours expected at 4:00 PM</p>
                       <div className="flex items-end gap-3 h-28 mt-8">
                           <div className="w-full bg-white/20 rounded-t-md h-[40%] group-hover:h-[60%] transition-all duration-500"></div>

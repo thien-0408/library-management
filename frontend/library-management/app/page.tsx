@@ -1,318 +1,372 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useSpring,
+} from "motion/react";
 
 const stats = [
-  { value: "1.24M", label: "Volumes curated" },
-  { value: "24/7", label: "Digital access" },
-  { value: "120+", label: "Study rooms & exhibits" },
-  { value: "98%", label: "Reservation fulfillment" },
+  { value: "1.24M", label: "Volumes indexed" },
+  { value: "128", label: "Seats live today" },
+  { value: "42K", label: "Monthly requests" },
+  { value: "98%", label: "Fulfilled on time" },
 ];
 
-const features = [
+const featureCards = [
   {
-    title: "Curated book discovery",
-    description:
-      "Browse modern titles and rare references in a catalog designed for focused research.",
+    title: "Search that feels cinematic",
+    body: "Move from ancient manuscripts to modern research with rich catalog context and instant request paths.",
+    meta: "Catalog intelligence",
   },
   {
-    title: "Room reservations",
-    description:
-      "Reserve quiet rooms and discussion spaces with real-time availability for every session.",
+    title: "Rooms that react in real time",
+    body: "Availability, capacity, and booking state stay visible so study groups can reserve without friction.",
+    meta: "Live reservations",
   },
   {
-    title: "Unified library control",
-    description:
-      "Handle circulation, inventory, requests, and room operations from one modern dashboard.",
+    title: "Operations behind the curtain",
+    body: "Inventory, approvals, fines, notifications, and user flows sit inside one controlled library workspace.",
+    meta: "Admin command",
   },
 ];
 
-const highlights = [
-  "Rare manuscripts and modern classics",
-  "Live room booking and availability",
-  "Built for students, researchers, and librarians",
+const archiveRows = [
+  [
+    "Rare folios",
+    "Design journals",
+    "Research rooms",
+    "Digital loans",
+    "Quiet zones",
+    "Faculty reserves",
+  ],
+  [
+    "Live holds",
+    "Fine tracking",
+    "Open stacks",
+    "Reading lists",
+    "Archive notes",
+    "Smart requests",
+  ],
+];
+
+const process = [
+  "Discover a title or space",
+  "Reserve, request, or bookmark",
+  "Track every update from your portal",
 ];
 
 export default function Home() {
-  return (
-    <main className="min-h-screen overflow-hidden bg-[#F8FAFC] text-slate-900">
-      <div className="relative isolate">
-        <div className="absolute inset-x-0 top-0 -z-10 h-[32rem] bg-[radial-gradient(circle_at_top_left,_rgba(220,38,38,0.22),_transparent_38%),radial-gradient(circle_at_top_right,_rgba(244,63,94,0.18),_transparent_28%),linear-gradient(180deg,_#fff7f7_0%,_#f8fafc_72%)]" />
-        <div className="absolute left-[-8rem] top-24 -z-10 h-72 w-72 rounded-full bg-[#DC2626]/10 blur-3xl" />
-        <div className="absolute right-[-6rem] top-40 -z-10 h-80 w-80 rounded-full bg-rose-300/20 blur-3xl" />
+  const pointerX = useMotionValue(0);
+  const pointerY = useMotionValue(0);
+  const smoothX = useSpring(pointerX, {
+    stiffness: 80,
+    damping: 24,
+    mass: 0.4,
+  });
+  const smoothY = useSpring(pointerY, {
+    stiffness: 80,
+    damping: 24,
+    mass: 0.4,
+  });
+  const glow = useMotionTemplate`radial-gradient(560px circle at ${smoothX}px ${smoothY}px, rgba(248, 113, 113, 0.22), transparent 44%)`;
 
-        <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#DC2626] text-white shadow-lg shadow-red-200/70">
-              <svg
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                />
-              </svg>
+  return (
+    <main
+      className="relative min-h-screen overflow-hidden bg-[#080605] text-[#fff7ed]"
+      onPointerMove={(event) => {
+        pointerX.set(event.clientX);
+        pointerY.set(event.clientY);
+      }}
+    >
+      <motion.div
+        className="pointer-events-none fixed inset-0 z-0"
+        style={{ background: glow }}
+      />
+      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_left,rgba(220,38,38,0.42),transparent_32%),radial-gradient(circle_at_78%_12%,rgba(251,146,60,0.18),transparent_25%),linear-gradient(180deg,#080605_0%,#160b09_46%,#080605_100%)]" />
+      <div className="pointer-events-none absolute inset-0 z-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.8)_1px,transparent_1px)] [background-size:72px_72px]" />
+
+      <div className="relative z-10">
+        <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-10">
+          <Link href="/" className="group flex items-center gap-3">
+            <div className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/10 shadow-2xl shadow-red-950/40 backdrop-blur">
+              <span className="h-4 w-4 rounded-full bg-red-500 shadow-[0_0_24px_rgba(239,68,68,.9)] transition group-hover:scale-125" />
             </div>
             <div>
-              <p className="text-lg font-bold tracking-tight text-slate-900">
-                OpenBook
-              </p>
-              <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-slate-500">
-                Digital archive
+              <p className="text-lg font-black tracking-tight">OpenBook</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.34em] text-orange-100/50">
+                Living archive
               </p>
             </div>
           </Link>
 
-          <div className="flex items-center gap-3">
+          <nav className="hidden items-center gap-8 text-sm font-bold text-orange-100/60 md:flex">
+            <a href="#experience" className="transition hover:text-white">
+              Experience
+            </a>
+            <a href="#systems" className="transition hover:text-white">
+              Systems
+            </a>
+            <a href="#access" className="transition hover:text-white">
+              Access
+            </a>
+          </nav>
+
+          <div className="flex items-center gap-2">
             <Link
               href="/login"
-              className="hidden rounded-full border border-slate-200 bg-white/70 px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur transition hover:border-red-200 hover:text-[#DC2626] sm:inline-flex"
+              className="hidden rounded-full border border-white/12 px-5 py-2.5 text-sm font-bold text-orange-50/75 transition hover:border-white/30 hover:text-white sm:inline-flex"
             >
-              Sign In
+              Sign in
             </Link>
             <Link
               href="/register"
-              className="inline-flex rounded-full bg-[#991B1B] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-red-200/80 transition hover:bg-[#B91C1C]"
+              className="rounded-full bg-orange-50 px-5 py-2.5 text-sm font-black text-[#160b09] shadow-[0_12px_40px_rgba(248,113,113,.24)] transition hover:-translate-y-0.5 hover:bg-white"
             >
-              Create Account
+              Enter archive
             </Link>
           </div>
         </header>
 
-        <section className="mx-auto grid w-full max-w-7xl gap-12 px-6 pb-16 pt-8 lg:grid-cols-[1.1fr_0.9fr] lg:px-10 lg:pb-24 lg:pt-10">
-          <div className="flex flex-col justify-center">
-            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/70 bg-white/65 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-slate-600 shadow-sm backdrop-blur-md">
-              <span className="h-2 w-2 rounded-full bg-[#DC2626]" />
-              The curator of human knowledge
+        <section className="mx-auto grid min-h-[calc(100vh-5.5rem)] w-full max-w-7xl items-center gap-12 px-5 pb-20 pt-8 sm:px-8 lg:grid-cols-[1fr_0.82fr] lg:px-10">
+          <motion.div
+            initial={{ opacity: 0, y: 26 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="inline-flex items-center gap-3 rounded-full border border-white/12 bg-white/[0.06] px-4 py-2 text-xs font-black uppercase tracking-[0.26em] text-orange-100/65 backdrop-blur">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-red-400" />
+              Library system reimagined
             </div>
 
-            <h1 className="mt-6 max-w-4xl text-5xl font-bold leading-[1.02] tracking-tight text-slate-900 sm:text-6xl lg:text-7xl">
-              A modern library experience for
-              <span className="bg-gradient-to-r from-[#DC2626] via-rose-500 to-pink-400 bg-clip-text text-transparent">
-                {" "}
-                research, discovery, and calm study.
-              </span>
+            <h1 className="mt-7 max-w-5xl text-6xl font-black leading-[0.88] tracking-[-0.08em] text-orange-50 sm:text-7xl lg:text-[7.8rem]">
+              Make study feel like stepping into a living archive.
             </h1>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600 sm:text-xl">
-              Explore curated collections, request books, and reserve study
-              rooms from one premium archive platform designed for the modern
-              scholar.
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-orange-100/62 sm:text-xl">
+              An interactive landing page for OpenBook: cinematic discovery,
+              live room booking, and library operations presented with motion,
+              depth, and calm precision.
             </p>
 
-            <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/register"
-                className="inline-flex items-center justify-center rounded-full bg-[#DC2626] px-7 py-4 text-base font-bold text-white shadow-xl shadow-red-200/80 transition hover:-translate-y-0.5 hover:bg-[#B91C1C]"
+                className="group inline-flex items-center justify-center rounded-full bg-[#f43f2f] px-7 py-4 text-base font-black text-white shadow-[0_22px_70px_rgba(244,63,47,.34)] transition hover:-translate-y-1 hover:bg-[#ff523f]"
               >
-                Start your archive account
+                Start exploring
+                <span className="ml-3 transition group-hover:translate-x-1">
+                  -&gt;
+                </span>
               </Link>
               <Link
-                href="/login"
-                className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white/70 px-7 py-4 text-base font-semibold text-slate-800 shadow-sm backdrop-blur transition hover:border-red-200 hover:text-[#DC2626]"
+                href="/catalog"
+                className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/[0.05] px-7 py-4 text-base font-bold text-orange-50/80 backdrop-blur transition hover:border-white/25 hover:text-white"
               >
-                Sign in to continue
+                View catalog
               </Link>
             </div>
+          </motion.div>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              {highlights.map((item) => (
-                <div
-                  key={item}
-                  className="rounded-full border border-white/80 bg-white/60 px-4 py-2 text-sm font-medium text-slate-600 shadow-sm backdrop-blur-md"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative flex items-center justify-center">
-            <div className="relative w-full max-w-xl rounded-[2rem] border border-white/70 bg-white/55 p-4 shadow-2xl shadow-red-100/60 backdrop-blur-xl sm:p-5">
-              <div className="relative overflow-hidden rounded-[1.6rem] bg-[#FFF5F5]">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94, rotate: -2 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="relative"
+          >
+            <div className="absolute -inset-8 rounded-[3rem] bg-red-500/20 blur-3xl" />
+            <div className="relative overflow-hidden rounded-[2.4rem] border border-white/12 bg-white/[0.07] p-3 shadow-2xl shadow-black/50 backdrop-blur-xl">
+              <div className="relative overflow-hidden rounded-[2rem]">
                 <Image
                   src="/lib.jpg"
-                  alt="OpenBook archive shelves"
+                  alt="OpenBook cinematic library archive"
                   width={900}
-                  height={760}
-                  className="h-[420px] w-full object-cover sm:h-[500px]"
+                  height={980}
                   priority
+                  className="h-[540px] w-full object-cover saturate-[0.78]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-slate-900/10 to-transparent" />
-
-                <div className="absolute left-5 top-5 rounded-2xl border border-white/40 bg-white/25 px-4 py-3 text-white shadow-lg backdrop-blur-md">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/80">
-                    Archive status
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,6,5,0)_0%,rgba(8,6,5,.18)_38%,rgba(8,6,5,.92)_100%)]" />
+                <motion.div
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute left-5 top-5 rounded-3xl border border-white/16 bg-black/30 p-5 backdrop-blur-md will-change-transform"
+                >
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-100/55">
+                    Archive pulse
                   </p>
-                  <p className="mt-1 text-lg font-bold">
-                    1,240,892 Volumes Online
+                  <p className="mt-2 text-3xl font-black">1,240,892</p>
+                  <p className="mt-1 text-sm font-semibold text-orange-100/60">
+                    volumes online
                   </p>
-                </div>
-
-                <div className="absolute bottom-5 left-5 right-5 rounded-[1.5rem] border border-white/40 bg-white/16 p-5 text-white shadow-lg backdrop-blur-xl">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/75">
-                    Current exhibit
+                </motion.div>
+                <div className="absolute bottom-5 left-5 right-5 rounded-[1.7rem] border border-white/15 bg-white/[0.08] p-5 backdrop-blur-2xl">
+                  <p className="text-[10px] font-black uppercase tracking-[0.32em] text-orange-100/55">
+                    Current journey
                   </p>
-                  <div className="mt-3 flex items-end justify-between gap-4">
-                    <div>
-                      <h2 className="text-2xl font-bold leading-tight">
-                        The evolution of human thought
-                      </h2>
-                      <p className="mt-2 max-w-sm text-sm leading-6 text-white/80">
-                        Browse rare manuscripts and contemporary scholarship
-                        through one refined research interface.
-                      </p>
-                    </div>
-                    <div className="hidden rounded-2xl border border-white/35 bg-white/15 px-4 py-3 text-right backdrop-blur md:block">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/70">
-                        Live today
-                      </p>
-                      <p className="mt-1 text-lg font-bold">
-                        128 seats available
-                      </p>
-                    </div>
+                  <h2 className="mt-3 text-3xl font-black tracking-tight">
+                    Reserve a quiet room. Request a rare book. Continue reading.
+                  </h2>
+                  <div className="mt-5 grid grid-cols-3 gap-2">
+                    {stats.slice(1).map((stat) => (
+                      <div
+                        key={stat.label}
+                        className="rounded-2xl bg-black/24 p-3"
+                      >
+                        <p className="text-lg font-black">{stat.value}</p>
+                        <p className="mt-1 text-[11px] font-bold leading-tight text-orange-100/52">
+                          {stat.label}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
-
-              {/*<div className="absolute -bottom-6 -left-6 hidden max-w-xs rounded-[1.75rem] border border-white/70 bg-white/75 p-5 shadow-xl backdrop-blur-xl lg:block">
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
-                  Why OpenBook
-                </p>
-                <p className="mt-2 text-lg font-bold text-slate-900">
-                  Books, requests, and room reservations flow through one calm
-                  interface.
-                </p>
-                requ
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Designed for librarians, students, and researchers who need
-                  clarity instead of clutter.
-                </p>
-              </div>*/}
             </div>
-          </div>
+          </motion.div>
         </section>
 
-        <section className="mx-auto w-full max-w-7xl px-6 pb-6 lg:px-10 lg:pb-10">
-          <div className="grid gap-4 rounded-[2rem] border border-white/80 bg-white/65 p-6 shadow-lg shadow-red-100/40 backdrop-blur-xl sm:grid-cols-2 xl:grid-cols-4">
+        <section
+          id="experience"
+          className="border-y border-white/10 bg-white/[0.035] py-6 backdrop-blur-xl"
+        >
+          <div className="mx-auto grid max-w-7xl gap-4 px-5 sm:grid-cols-2 sm:px-8 lg:grid-cols-4 lg:px-10">
             {stats.map((stat) => (
-              <div
+              <motion.div
                 key={stat.label}
-                className="rounded-[1.5rem] border border-white/70 bg-white/70 p-5 shadow-sm backdrop-blur-md"
+                whileHover={{ y: -6 }}
+                className="rounded-[1.6rem] border border-white/10 bg-black/18 p-6"
               >
-                <p className="text-3xl font-bold tracking-tight text-slate-900">
+                <p className="text-4xl font-black tracking-tight text-orange-50">
                   {stat.value}
                 </p>
-                <p className="mt-2 text-sm font-medium text-slate-600">
+                <p className="mt-2 text-sm font-bold text-orange-100/50">
                   {stat.label}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
 
-        <section className="mx-auto w-full max-w-7xl px-6 py-12 lg:px-10 lg:py-16">
-          <div className="mb-8 max-w-2xl">
-            <p className="text-sm font-bold uppercase tracking-[0.28em] text-[#DC2626]">
-              What the platform unlocks
+        <section
+          id="systems"
+          className="mx-auto w-full max-w-7xl px-5 py-24 sm:px-8 lg:px-10"
+        >
+          <div className="max-w-3xl">
+            <p className="text-sm font-black uppercase tracking-[0.32em] text-red-300/80">
+              Interactive systems
             </p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-              A quieter, sharper way to move through your library system.
+            <h2 className="mt-4 text-4xl font-black tracking-[-0.05em] sm:text-6xl">
+              Not a flat homepage. A responsive product mood.
             </h2>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-3">
-            {features.map((feature, index) => (
-              <article
+          <div className="mt-10 grid gap-5 lg:grid-cols-3">
+            {featureCards.map((feature, index) => (
+              <motion.article
                 key={feature.title}
-                className="relative overflow-hidden rounded-[2rem] border border-white/80 bg-white/70 p-7 shadow-lg shadow-red-100/40 backdrop-blur-xl"
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, delay: index * 0.08 }}
+                whileHover={{
+                  y: -10,
+                  rotate: index === 1 ? 0 : index === 0 ? -1.5 : 1.5,
+                }}
+                className="group relative min-h-80 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.055] p-7 backdrop-blur-xl"
               >
-                <div className="absolute right-0 top-0 h-28 w-28 rounded-full bg-[#DC2626]/8 blur-2xl" />
-                <div className="relative">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFF5F5] text-[#DC2626] shadow-sm">
-                    <span className="text-sm font-bold">0{index + 1}</span>
-                  </div>
-                  <h3 className="mt-6 text-2xl font-bold text-slate-900">
-                    {feature.title}
-                  </h3>
-                  <p className="mt-3 text-base leading-7 text-slate-600">
-                    {feature.description}
-                  </p>
-                </div>
-              </article>
+                <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-orange-100/60 to-transparent" />
+                <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-red-500/18 blur-3xl transition group-hover:bg-orange-400/25" />
+                <p className="text-[10px] font-black uppercase tracking-[0.32em] text-orange-100/45">
+                  {feature.meta}
+                </p>
+                <h3 className="mt-16 text-3xl font-black tracking-tight">
+                  {feature.title}
+                </h3>
+                <p className="mt-5 text-base leading-7 text-orange-100/58">
+                  {feature.body}
+                </p>
+                <span className="absolute bottom-7 left-7 text-7xl font-black tracking-[-0.08em] text-white/[0.04]">
+                  0{index + 1}
+                </span>
+              </motion.article>
             ))}
           </div>
         </section>
 
-        <section className="mx-auto w-full max-w-7xl px-6 pb-20 pt-4 lg:px-10 lg:pb-24">
-          <div className="grid gap-6 rounded-[2.5rem] border border-white/80 bg-[linear-gradient(135deg,rgba(255,245,245,0.95),rgba(255,255,255,0.72))] p-6 shadow-2xl shadow-red-100/50 backdrop-blur-xl lg:grid-cols-[1fr_0.9fr] lg:p-8">
-            <div className="rounded-[2rem] bg-[#991B1B] px-7 py-8 text-white shadow-xl">
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/75">
-                Built for the modern scholar
+        <section className="overflow-hidden py-12">
+          {archiveRows.map((row, rowIndex) => (
+            <motion.div
+              key={row.join("")}
+              animate={{ x: rowIndex === 0 ? [0, -420, 0] : [-420, 0, -420] }}
+              transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
+              className="mb-4 flex w-max gap-4 px-5"
+            >
+              {[...row, ...row, ...row].map((item, index) => (
+                <span
+                  key={`${item}-${index}`}
+                  className="rounded-full border border-white/10 bg-white/[0.045] px-8 py-4 text-2xl font-black tracking-[-0.04em] text-orange-50/70 backdrop-blur"
+                >
+                  {item}
+                </span>
+              ))}
+            </motion.div>
+          ))}
+        </section>
+
+        <section
+          id="access"
+          className="mx-auto w-full max-w-7xl px-5 py-24 sm:px-8 lg:px-10"
+        >
+          <div className="grid gap-5 rounded-[2.6rem] border border-white/10 bg-[#f8efe2] p-5 text-[#180d09] shadow-[0_30px_100px_rgba(0,0,0,.35)] lg:grid-cols-[0.9fr_1.1fr] lg:p-7">
+            <div className="rounded-[2rem] bg-[#180d09] p-8 text-orange-50 lg:p-10">
+              <p className="text-[10px] font-black uppercase tracking-[0.35em] text-orange-100/45">
+                Build with AI agents
               </p>
-              <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
-                Step into a digital archive that feels editorial, calm, and
-                immediate.
+              <h2 className="mt-5 text-4xl font-black tracking-[-0.05em] sm:text-5xl">
+                Prompt for direction. Let the agent implement.
               </h2>
-              <p className="mt-4 max-w-xl text-base leading-7 text-white/80">
-                From book requests to room scheduling, every surface is designed
-                to keep discovery elegant and operations manageable.
+              <p className="mt-5 text-base leading-7 text-orange-100/62">
+                Ask Codex, Claude Code, or Antigravity for sections, motion
+                states, responsive polish, then verify in the browser and
+                iterate by feel.
               </p>
-              <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/register"
-                  className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#991B1B] transition hover:bg-white/90"
+                  className="rounded-full bg-red-500 px-6 py-3.5 text-center text-sm font-black text-white transition hover:bg-red-400"
                 >
-                  Join OpenBook
+                  Create account
                 </Link>
                 <Link
                   href="/login"
-                  className="inline-flex items-center justify-center rounded-full border border-white/30 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
+                  className="rounded-full border border-white/15 px-6 py-3.5 text-center text-sm font-black text-white/80 transition hover:text-white"
                 >
-                  Access your archive
+                  Sign in
                 </Link>
               </div>
             </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-[1.75rem] border border-white/80 bg-white/75 p-5 shadow-md backdrop-blur-xl sm:col-span-2">
-                <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">
-                  Scholar note
-                </p>
-                <p className="mt-3 text-xl font-bold text-slate-900">
-                  The homepage now mirrors the product’s refined archive
-                  language instead of a generic app shell.
-                </p>
-              </div>
-              <div className="rounded-[1.75rem] border border-white/80 bg-white/70 p-5 shadow-md backdrop-blur-xl">
-                <p className="text-sm font-semibold text-slate-500">
-                  Collection access
-                </p>
-                <p className="mt-2 text-2xl font-bold text-slate-900">
-                  Global catalog
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  One entry point for discovery, requesting, and reading
-                  planning.
-                </p>
-              </div>
-              <div className="rounded-[1.75rem] border border-white/80 bg-white/70 p-5 shadow-md backdrop-blur-xl">
-                <p className="text-sm font-semibold text-slate-500">
-                  Study workflow
-                </p>
-                <p className="mt-2 text-2xl font-bold text-slate-900">
-                  Live reservations
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Quiet-room and discussion-space booking with clear status
-                  visibility.
-                </p>
-              </div>
+            <div className="grid gap-4 sm:grid-cols-3">
+              {process.map((step, index) => (
+                <motion.div
+                  key={step}
+                  whileHover={{ y: -8 }}
+                  className="rounded-[1.7rem] border border-black/10 bg-white/55 p-6 shadow-sm"
+                >
+                  <p className="text-sm font-black text-red-600">
+                    0{index + 1}
+                  </p>
+                  <p className="mt-14 text-2xl font-black tracking-tight">
+                    {step}
+                  </p>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>

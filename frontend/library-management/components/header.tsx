@@ -78,10 +78,10 @@ export default function Header({ role }: HeaderProps) {
 
   const linkClassName = (href: string) => {
     const isActive = pathname === href;
-    return `flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-extrabold transition-all ${
+    return `group flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-black transition-all ${
       isActive
-        ? 'bg-primary text-white shadow-lg shadow-primary/25'
-        : 'text-on-surface-variant hover:bg-primary/8 hover:text-primary'
+        ? 'bg-red-600 text-white shadow-lg shadow-red-200'
+        : 'text-slate-500 hover:bg-red-50 hover:text-red-700'
     }`;
   };
 
@@ -89,17 +89,27 @@ export default function Header({ role }: HeaderProps) {
     <>
       <div className="flex items-center justify-between lg:block">
         <div>
-          <Link href="/catalog" className="font-headline text-3xl font-black tracking-tight text-primary">
-            OpenBook
+          <Link href="/catalog" className="flex items-center gap-3">
+            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-red-600 text-white shadow-lg shadow-red-100">
+              <i className="fa-solid fa-book-open text-lg"></i>
+            </span>
+            <span>
+              <span className="block font-headline text-2xl font-black tracking-tight text-slate-950">
+                OpenBook
+              </span>
+              <span className="block text-[10px] font-black uppercase tracking-[0.26em] text-red-600">
+                Library portal
+              </span>
+            </span>
           </Link>
-          <p className="mt-2 max-w-[12rem] text-sm font-semibold leading-relaxed text-on-surface-variant">
-            Library workspace for catalog, reservations, and academic circulation.
+          <p className="mt-5 max-w-[13rem] text-sm font-bold leading-relaxed text-slate-500">
+            Redefined workspace for catalog, reservations, and academic circulation.
           </p>
         </div>
         <button
           type="button"
           onClick={() => setIsOpen(false)}
-          className="lg:hidden rounded-full border border-outline-variant px-3 py-2 text-on-surface-variant"
+          className="rounded-full border border-red-100 bg-white px-3 py-2 text-slate-500 shadow-sm transition hover:bg-red-50 hover:text-red-700 lg:hidden"
           aria-label="Close navigation"
         >
           <i className="fa-solid fa-xmark"></i>
@@ -109,10 +119,10 @@ export default function Header({ role }: HeaderProps) {
       <nav className="mt-8 flex flex-col gap-2">
         {links.map((link) => (
           <Link key={link.href} href={link.href} className={linkClassName(link.href)}>
-            <span className="relative w-4 text-center">
+            <span className={`relative grid h-9 w-9 place-items-center rounded-xl text-center transition ${pathname === link.href ? 'bg-white/15 text-white' : 'bg-red-50 text-red-600 group-hover:bg-white'}`}>
               <i className={`fa-solid ${link.icon}`}></i>
               {link.href === '/notifications' && unreadCount > 0 && (
-                <span className="absolute -right-3 -top-3 flex min-w-5 items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-[10px] font-black leading-none text-white ring-2 ring-white">
+                <span className="absolute -right-2 -top-2 flex min-w-5 items-center justify-center rounded-full bg-slate-950 px-1.5 py-0.5 text-[10px] font-black leading-none text-white ring-2 ring-white">
                   {unreadCount > 99 ? '99+' : unreadCount}
                 </span>
               )}
@@ -122,12 +132,12 @@ export default function Header({ role }: HeaderProps) {
         ))}
       </nav>
 
-      <div className="mt-auto border-t border-outline-variant/80 pt-6">
+      <div className="mt-auto border-t border-red-100 pt-6">
         {isLoggedIn ? (
           <button
             type="button"
             onClick={() => setIsLogoutConfirmOpen(true)}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-error/10 px-4 py-3 text-sm font-black text-error hover:bg-error/20"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-red-50 px-4 py-3 text-sm font-black text-red-700 transition hover:bg-red-100"
           >
             <i className="fa-solid fa-right-from-bracket"></i>
             Logout
@@ -135,7 +145,7 @@ export default function Header({ role }: HeaderProps) {
         ) : (
           <Link
             href="/login"
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary/10 px-4 py-3 text-sm font-black text-primary hover:bg-primary/20"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-red-600 px-4 py-3 text-sm font-black text-white shadow-lg shadow-red-100 transition hover:bg-red-700"
           >
             <i className="fa-solid fa-right-to-bracket"></i>
             Login
@@ -147,20 +157,21 @@ export default function Header({ role }: HeaderProps) {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-40 border-b border-outline-variant/60 bg-white/95 px-4 py-4 backdrop-blur lg:hidden">
+      <header className="fixed inset-x-0 top-0 z-40 border-b border-red-100 bg-white/90 px-4 py-4 shadow-sm backdrop-blur-xl lg:hidden">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <div>
-            <Link href="/catalog" className="font-headline text-2xl font-black tracking-tight text-primary">
-              OpenBook
-            </Link>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-on-surface-variant/70">
-              Library portal
-            </p>
-          </div>
+          <Link href="/catalog" className="flex items-center gap-3">
+            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-red-600 text-white shadow-lg shadow-red-100">
+              <i className="fa-solid fa-book-open"></i>
+            </span>
+            <span>
+              <span className="block font-headline text-2xl font-black tracking-tight text-slate-950">OpenBook</span>
+              <span className="block text-[10px] font-black uppercase tracking-[0.22em] text-red-600">Library portal</span>
+            </span>
+          </Link>
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            className="flex h-12 w-12 items-center justify-center rounded-2xl border border-outline-variant bg-white text-on-surface shadow-sm"
+            className="flex h-12 w-12 items-center justify-center rounded-2xl border border-red-100 bg-red-50 text-red-700 shadow-sm transition hover:bg-red-100"
             aria-label="Open navigation"
           >
             <i className="fa-solid fa-bars text-lg"></i>
@@ -171,7 +182,7 @@ export default function Header({ role }: HeaderProps) {
       {isOpen && (
         <div className="fixed inset-0 z-50 bg-slate-950/35 backdrop-blur-sm lg:hidden" onClick={() => setIsOpen(false)}>
           <aside
-            className="sidebar-surface absolute left-0 top-0 flex h-full w-[19rem] flex-col bg-white px-5 py-6"
+            className="absolute left-0 top-0 flex h-full w-[20rem] flex-col border-r border-red-100 bg-white px-5 py-6 shadow-2xl shadow-red-950/10"
             onClick={(event) => event.stopPropagation()}
           >
             {sidebarContent}
@@ -179,8 +190,11 @@ export default function Header({ role }: HeaderProps) {
         </div>
       )}
 
-      <aside className="sidebar-surface fixed left-0 top-0 z-30 hidden h-screen w-[var(--sidebar-width)] flex-col border-r border-outline-variant/70 bg-white px-6 py-8 lg:flex">
-        {sidebarContent}
+      <aside className="fixed left-0 top-0 z-30 hidden h-screen w-[var(--sidebar-width)] flex-col border-r border-red-100 bg-white px-6 py-8 shadow-[18px_0_70px_-52px_rgba(153,27,27,0.65)] lg:flex">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-red-50 to-transparent" />
+        <div className="relative flex min-h-0 flex-1 flex-col">
+          {sidebarContent}
+        </div>
       </aside>
 
       <ConfirmModal

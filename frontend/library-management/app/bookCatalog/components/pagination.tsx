@@ -16,9 +16,9 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         <button
           key={i}
           onClick={() => onPageChange(i)}
-          className={`w-10 h-10 flex items-center justify-center rounded-lg font-bold transition-all ${currentPage === i
-            ? 'vibrant-gradient-bg text-on-primary shadow-md' 
-            : 'text-on-surface-variant hover:bg-surface-variant' 
+          className={`flex h-10 w-10 items-center justify-center rounded-full font-black transition-all ${currentPage === i
+            ? 'bg-red-600 text-white shadow-lg shadow-red-100'
+            : 'text-slate-500 hover:bg-red-50 hover:text-red-700'
             }`}
         >
           {i}
@@ -29,15 +29,15 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   };
 
   return (
-    <footer className="mt-20 pt-10 border-t border-outline-variant flex flex-col md:flex-row items-center justify-between gap-8">
-      <p className="text-sm font-bold text-on-surface-variant/70">
+    <footer className="mt-16 flex flex-col items-center justify-between gap-6 border-t border-red-100 pt-8 md:flex-row">
+      <p className="text-sm font-black text-slate-500">
         Showing page {currentPage} of {totalPages}
       </p>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 rounded-full border border-red-100 bg-white p-2 shadow-sm">
         <button
           onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
           disabled={currentPage === 1}
-          className={`w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant transition-all ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : 'hover:border-primary hover:text-primary'
+          className={`flex h-10 w-10 items-center justify-center rounded-full border border-red-100 transition-all ${currentPage === 1 ? 'cursor-not-allowed opacity-50' : 'hover:border-red-300 hover:bg-red-50 hover:text-red-700'
             }`}
         >
           <i className="fa-solid fa-chevron-left text-sm"></i>
@@ -48,7 +48,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         <button
           onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
           disabled={currentPage === totalPages}
-          className={`w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant transition-all ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : 'hover:border-primary hover:text-primary'
+          className={`flex h-10 w-10 items-center justify-center rounded-full border border-red-100 transition-all ${currentPage === totalPages ? 'cursor-not-allowed opacity-50' : 'hover:border-red-300 hover:bg-red-50 hover:text-red-700'
             }`}
         >
           <i className="fa-solid fa-chevron-right text-sm"></i>

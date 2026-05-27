@@ -47,6 +47,15 @@ const canConfirmUpcoming = (reservation: UpcomingReservation) => {
   return now >= start && now <= end;
 };
 
+const getErrorMessage = (error: unknown, fallback: string) => {
+  if (error && typeof error === 'object') {
+    const maybeError = error as { data?: { message?: string }; message?: string };
+    return maybeError.data?.message || maybeError.message || fallback;
+  }
+
+  return fallback;
+};
+
 export default function RoomReservationsPage() {
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [availableRooms, setAvailableRooms] = useState<RoomAvailability[]>([]);
@@ -84,10 +93,10 @@ export default function RoomReservationsPage() {
         if (prev && selectableRooms.some((room) => room.id === prev)) return prev;
         return selectableRooms[0]?.id || '';
       });
-    } catch (err: any) {
+    } catch (err) {
       setAvailableRooms([]);
       setSelectedRoomId('');
-      setError(err.data?.message || err.message || 'Failed to load room availability');
+      setError(getErrorMessage(err, 'Failed to load room availability'));
     } finally {
       setIsLoadingAvailability(false);
     }
@@ -123,8 +132,8 @@ export default function RoomReservationsPage() {
       setTimeSlots(loadedTimeSlots);
       setUpcoming(upcomingRes);
       await syncSelectionForDate(bookingDate, loadedTimeSlots, selectedTimeSlotId);
-    } catch (err: any) {
-      setError(err.data?.message || err.message || 'Failed to load booking data');
+    } catch (err) {
+      setError(getErrorMessage(err, 'Failed to load booking data'));
     } finally {
       setIsLoading(false);
     }
@@ -166,8 +175,8 @@ export default function RoomReservationsPage() {
       showToast('Reservation created', 'Your study room booking was created successfully.', 'success');
       await loadInitialData();
       await loadAvailability(bookingDate, selectedTimeSlotId);
-    } catch (err: any) {
-      const message = err.data?.message || err.message || 'Failed to create reservation';
+    } catch (err) {
+      const message = getErrorMessage(err, 'Failed to create reservation');
       setError(message);
       showToast('Reservation failed', message, 'error');
     } finally {
@@ -196,33 +205,46 @@ export default function RoomReservationsPage() {
       if (selectedTimeSlotId) {
         await loadAvailability(bookingDate, selectedTimeSlotId);
       }
-    } catch (err: any) {
-      setError(err.data?.message || err.message || `Failed to ${action} reservation`);
+    } catch (err) {
+      setError(getErrorMessage(err, `Failed to ${action} reservation`));
     }
   };
 
   return (
-    <div className="bg-surface font-body text-on-surface min-h-screen">
+    <div className="min-h-screen bg-[#fff7f7] font-body text-slate-950">
       <Header />
-      <main className="app-shell-main app-shell-content page-shell px-6 md:px-8 xl:px-10 max-w-7xl mx-auto">
-        <div className="mb-10">
-          <h1 className="font-headline font-extrabold text-4xl tracking-tight">Book a Study Room</h1>
-          <p className="text-on-surface-variant mt-3 text-lg font-medium">
-            Choose a date and time first, then reserve from rooms that are actually available.
-          </p>
+      <main className="app-shell-main app-shell-content page-shell mx-auto max-w-7xl px-5 pb-16 md:px-8 xl:px-10">
+        <div className="relative mb-8 overflow-hidden rounded-[2.25rem] border border-red-100 bg-white px-6 py-8 shadow-[0_24px_80px_-48px_rgba(153,27,27,0.45)] sm:px-8 lg:px-10">
+          <div className="absolute right-[-5rem] top-[-6rem] h-72 w-72 rounded-full bg-red-200/55 blur-3xl" />
+          <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-red-100 bg-red-50 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-red-700">
+                <span className="h-2 w-2 rounded-full bg-red-600" />
+                Study room booking
+              </div>
+              <h1 className="mt-5 max-w-3xl font-headline text-5xl font-black leading-[0.95] tracking-[-0.055em] text-slate-950 sm:text-6xl">Book a focused study room.</h1>
+              <p className="mt-5 max-w-2xl text-lg font-medium leading-8 text-slate-600">
+                Choose a date and time, then reserve from rooms that are actually available for your selected slot.
+              </p>
+            </div>
+            <div className="rounded-[1.75rem] border border-red-100 bg-red-50/70 p-5 text-center">
+              <p className="text-4xl font-black text-red-700">{availableRooms.filter((room) => !room.isFull).length}</p>
+              <p className="mt-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Rooms selectable</p>
+            </div>
+          </div>
         </div>
 
-        {error && <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-600 font-semibold">{error}</div>}
-        {successMessage && <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-700 font-semibold">{successMessage}</div>}
+        {error && <div className="mb-6 rounded-2xl border border-red-100 bg-white p-4 font-bold text-red-700 shadow-sm">{error}</div>}
+        {successMessage && <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 font-bold text-emerald-700">{successMessage}</div>}
 
         {upcoming && (
-          <div className="mb-8 rounded-2xl border border-primary/20 bg-primary/5 p-6">
+          <div className="mb-8 rounded-[2rem] border border-red-100 bg-white p-6 shadow-[0_18px_55px_-42px_rgba(153,27,27,0.55)]">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <div>
-                <h2 className="font-headline font-bold text-xl mb-2">Upcoming Reservation</h2>
-                <p className="font-semibold">{upcoming.roomName} on {upcoming.bookingDate}, {upcoming.startTime} - {upcoming.endTime}</p>
+                <h2 className="mb-2 font-headline text-xl font-black text-slate-950">Upcoming Reservation</h2>
+                <p className="font-bold text-slate-600">{upcoming.roomName} on {upcoming.bookingDate}, {upcoming.startTime} - {upcoming.endTime}</p>
                 {upcoming.accessCode && (
-                  <p className="mt-2 inline-flex rounded-lg bg-white px-3 py-2 text-sm font-bold text-primary">
+                  <p className="mt-3 inline-flex rounded-full bg-red-50 px-4 py-2 text-sm font-black text-red-700">
                     Access code: {upcoming.accessCode}
                   </p>
                 )}
@@ -231,7 +253,7 @@ export default function RoomReservationsPage() {
                 {canConfirmUpcoming(upcoming) && (
                   <button
                     onClick={() => handleUpcomingAction('confirm')}
-                    className="px-4 py-2 rounded-lg bg-green-100 text-green-700 font-bold"
+                    className="rounded-full bg-emerald-100 px-4 py-2 font-black text-emerald-700"
                   >
                     Confirm
                   </button>
@@ -239,7 +261,7 @@ export default function RoomReservationsPage() {
                 {canCancelUpcoming(upcoming) && (
                   <button
                     onClick={() => handleUpcomingAction('cancel')}
-                    className="px-4 py-2 rounded-lg bg-amber-100 text-amber-700 font-bold"
+                    className="rounded-full bg-amber-100 px-4 py-2 font-black text-amber-700"
                   >
                     Cancel
                   </button>
@@ -249,10 +271,10 @@ export default function RoomReservationsPage() {
           </div>
         )}
 
-        <form onSubmit={createReservation} className="bg-white border border-outline-variant rounded-2xl p-6 shadow-sm mb-8 space-y-6">
+        <form onSubmit={createReservation} className="mb-8 space-y-6 rounded-[2rem] border border-red-100 bg-white p-6 shadow-[0_18px_55px_-42px_rgba(153,27,27,0.55)]">
           <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-4">
             <label className="space-y-2">
-              <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Date</span>
+              <span className="text-xs font-black uppercase tracking-widest text-slate-400">Date</span>
               <input
                 type="date"
                 value={bookingDate}
@@ -260,18 +282,18 @@ export default function RoomReservationsPage() {
                 onChange={(e) => {
                   void handleDateChange(e.target.value);
                 }}
-                className="w-full rounded-xl border-outline-variant px-4 py-3"
+                className="w-full rounded-2xl border border-red-100 px-4 py-3 font-bold outline-none focus:border-red-300 focus:ring-4 focus:ring-red-500/10"
                 required
               />
             </label>
             <label className="space-y-2">
-              <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Time slot</span>
+              <span className="text-xs font-black uppercase tracking-widest text-slate-400">Time slot</span>
               <select
                 value={selectedTimeSlotId}
                 onChange={(e) => {
                   void handleTimeSlotChange(e.target.value);
                 }}
-                className="w-full rounded-xl border-outline-variant px-4 py-3"
+                className="w-full rounded-2xl border border-red-100 px-4 py-3 font-bold outline-none focus:border-red-300 focus:ring-4 focus:ring-red-500/10"
                 required
               >
                 {!hasVisibleTimeSlots ? (
@@ -290,8 +312,8 @@ export default function RoomReservationsPage() {
           <div>
             <div className="flex items-center justify-between mb-4 gap-4">
               <div>
-                <h2 className="font-headline font-bold text-xl">Available Rooms</h2>
-                <p className="text-sm text-on-surface-variant mt-1">Pick from rooms with seats left for the selected slot.</p>
+                <h2 className="font-headline text-xl font-black text-slate-950">Available Rooms</h2>
+                <p className="mt-1 text-sm font-medium text-slate-500">Pick from rooms with seats left for the selected slot.</p>
               </div>
               {isLoadingAvailability && <SkeletonBlock className="h-4 w-36" />}
             </div>
@@ -299,7 +321,7 @@ export default function RoomReservationsPage() {
             {isLoading ? (
               <CardGridSkeleton count={6} />
             ) : availableRooms.length === 0 ? (
-              <div className="rounded-2xl border border-outline-variant bg-surface-variant/20 p-8 text-center text-on-surface-variant font-semibold">
+              <div className="rounded-2xl border border-red-100 bg-red-50/60 p-8 text-center font-bold text-slate-500">
                 No rooms available for this selection.
               </div>
             ) : (
@@ -314,16 +336,16 @@ export default function RoomReservationsPage() {
                       disabled={room.isFull}
                       className={`text-left rounded-2xl border p-5 transition-all ${
                         room.isFull
-                          ? 'border-outline-variant/40 bg-surface-variant/20 opacity-60 cursor-not-allowed'
+                          ? 'cursor-not-allowed border-red-100 bg-red-50/40 opacity-60'
                           : isSelected
-                            ? 'border-primary bg-primary/5 shadow-md'
-                            : 'border-outline-variant hover:border-primary/40 hover:shadow-sm'
+                            ? 'border-red-300 bg-red-50 shadow-md shadow-red-100'
+                            : 'border-red-100 bg-white hover:-translate-y-1 hover:border-red-200 hover:shadow-sm'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-4 mb-4">
                         <div>
-                          <h3 className="font-bold text-lg text-on-surface">{room.name}</h3>
-                          <p className="text-sm text-on-surface-variant mt-1">{room.description || 'Study room'}</p>
+                          <h3 className="text-lg font-black text-slate-950">{room.name}</h3>
+                          <p className="mt-1 text-sm text-slate-500">{room.description || 'Study room'}</p>
                         </div>
                         <span className={`text-[10px] font-black px-2.5 py-1 rounded-md uppercase tracking-wider ${room.isFull ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}`}>
                           {room.isFull ? 'Full' : 'Available'}
@@ -332,12 +354,12 @@ export default function RoomReservationsPage() {
 
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <p className="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-[0.1em]">Capacity</p>
-                          <p className="font-bold text-on-surface mt-1">{room.capacity}</p>
+                          <p className="text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">Capacity</p>
+                          <p className="mt-1 font-black text-slate-950">{room.capacity}</p>
                         </div>
                         <div>
-                          <p className="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-[0.1em]">Seats left</p>
-                          <p className="font-bold text-on-surface mt-1">{room.seatsLeft}</p>
+                          <p className="text-[10px] font-black uppercase tracking-[0.1em] text-slate-400">Seats left</p>
+                          <p className="mt-1 font-black text-slate-950">{room.seatsLeft}</p>
                         </div>
                       </div>
                     </button>
@@ -351,7 +373,7 @@ export default function RoomReservationsPage() {
             <button
               type="submit"
               disabled={!selectedRoomId || !selectedTimeSlotId || isSubmitting || isLoadingAvailability}
-              className="vibrant-gradient-bg text-white px-6 py-3 rounded-xl font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-full bg-red-600 px-7 py-3 font-black text-white shadow-lg shadow-red-100 transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSubmitting ? 'Booking...' : 'Reserve Room'}
             </button>

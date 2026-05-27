@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
   BOOK_CATEGORY_OPTIONS,
@@ -27,11 +27,7 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, book, onClose, onSa
   const [image, setImage] = useState<File | null>(null);
   const isEditMode = Boolean(book);
 
-  const previewUrl = useMemo(() => {
-    if (image) return URL.createObjectURL(image);
-    if (book?.coverImage) return resolveAssetUrl(book.coverImage);
-    return '';
-  }, [book?.coverImage, image]);
+  const previewUrl = image ? URL.createObjectURL(image) : book?.coverImage ? resolveAssetUrl(book.coverImage) : '';
 
   useEffect(() => {
     if (!isOpen) return;
@@ -61,55 +57,55 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, book, onClose, onSa
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white w-full max-w-3xl max-h-[90vh] rounded-3xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-10 duration-300 flex flex-col">
-        <div className="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low shrink-0">
-          <h2 className="font-headline font-bold text-2xl">{isEditMode ? 'Edit Book' : 'Add New Book'}</h2>
-          <button onClick={onClose} className="w-10 h-10 flex items-center justify-center hover:bg-error/10 hover:text-error rounded-full transition-colors text-slate-400">
+    <div className="fixed inset-0 z-[100] flex animate-in items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm duration-200 fade-in">
+      <div className="flex max-h-[90vh] w-full max-w-3xl animate-in flex-col overflow-hidden rounded-[2rem] border border-red-100 bg-white shadow-2xl duration-300 slide-in-from-bottom-10">
+        <div className="flex shrink-0 items-center justify-between border-b border-red-100 bg-red-50/60 px-6 py-4">
+          <h2 className="font-headline text-2xl font-black text-slate-950">{isEditMode ? 'Edit Book' : 'Add New Book'}</h2>
+          <button onClick={onClose} className="flex h-10 w-10 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-white hover:text-red-700">
             <i className="fa-solid fa-xmark text-xl"></i>
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="flex-1 space-y-4 overflow-y-auto p-6">
           <div className="space-y-2">
-            <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Book Title</label>
-            <input required value={title} onChange={(e) => setTitle(e.target.value)} className="w-full rounded-xl border-outline-variant focus:border-primary focus:ring-primary/20 text-sm py-3.5 px-4" placeholder="e.g. The Grand Library" type="text" />
+            <label className="text-xs font-black uppercase tracking-widest text-slate-400">Book Title</label>
+            <input required value={title} onChange={(e) => setTitle(e.target.value)} className="w-full rounded-2xl border border-red-100 px-4 py-3.5 text-sm font-bold outline-none focus:border-red-300 focus:ring-4 focus:ring-red-500/10" placeholder="e.g. The Grand Library" type="text" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Author</label>
-              <input required value={author} onChange={(e) => setAuthor(e.target.value)} className="w-full rounded-xl border-outline-variant focus:border-primary focus:ring-primary/20 text-sm py-3.5 px-4" placeholder="Full name" type="text" />
+              <label className="text-xs font-black uppercase tracking-widest text-slate-400">Author</label>
+              <input required value={author} onChange={(e) => setAuthor(e.target.value)} className="w-full rounded-2xl border border-red-100 px-4 py-3.5 text-sm font-bold outline-none focus:border-red-300 focus:ring-4 focus:ring-red-500/10" placeholder="Full name" type="text" />
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">ISBN</label>
-              <input required value={isbn} onChange={(e) => setIsbn(e.target.value)} disabled={isEditMode} className="w-full rounded-xl border-outline-variant focus:border-primary focus:ring-primary/20 text-sm py-3.5 px-4 disabled:bg-surface-variant disabled:text-on-surface-variant" placeholder="978..." type="text" />
+              <label className="text-xs font-black uppercase tracking-widest text-slate-400">ISBN</label>
+              <input required value={isbn} onChange={(e) => setIsbn(e.target.value)} disabled={isEditMode} className="w-full rounded-2xl border border-red-100 px-4 py-3.5 text-sm font-bold outline-none focus:border-red-300 focus:ring-4 focus:ring-red-500/10 disabled:bg-red-50 disabled:text-slate-400" placeholder="978..." type="text" />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Category</label>
-              <select value={category} onChange={(e) => setCategory(e.target.value as BookCategory)} className="w-full rounded-xl border-outline-variant focus:border-primary focus:ring-primary/20 text-sm py-3.5 px-4">
+              <label className="text-xs font-black uppercase tracking-widest text-slate-400">Category</label>
+              <select value={category} onChange={(e) => setCategory(e.target.value as BookCategory)} className="w-full rounded-2xl border border-red-100 px-4 py-3.5 text-sm font-bold outline-none focus:border-red-300 focus:ring-4 focus:ring-red-500/10">
                 {BOOK_CATEGORY_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>{option.label}</option>
                 ))}
               </select>
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Year</label>
-              <input required value={yearOfPublication} onChange={(e) => setYearOfPublication(Number(e.target.value))} className="w-full rounded-xl border-outline-variant focus:border-primary focus:ring-primary/20 text-sm py-3.5 px-4" type="number" min="1" />
+              <label className="text-xs font-black uppercase tracking-widest text-slate-400">Year</label>
+              <input required value={yearOfPublication} onChange={(e) => setYearOfPublication(Number(e.target.value))} className="w-full rounded-2xl border border-red-100 px-4 py-3.5 text-sm font-bold outline-none focus:border-red-300 focus:ring-4 focus:ring-red-500/10" type="number" min="1" />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Quantity</label>
-              <input required value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} className="w-full rounded-xl border-outline-variant focus:border-primary focus:ring-primary/20 text-sm py-3.5 px-4" type="number" min="0" />
+              <label className="text-xs font-black uppercase tracking-widest text-slate-400">Quantity</label>
+              <input required value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} className="w-full rounded-2xl border border-red-100 px-4 py-3.5 text-sm font-bold outline-none focus:border-red-300 focus:ring-4 focus:ring-red-500/10" type="number" min="0" />
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Type</label>
-              <select value={documentType} onChange={(e) => setDocumentType(e.target.value as 'BOOK' | 'DOCUMENT')} className="w-full rounded-xl border-outline-variant focus:border-primary focus:ring-primary/20 text-sm py-3.5 px-4">
+              <label className="text-xs font-black uppercase tracking-widest text-slate-400">Type</label>
+              <select value={documentType} onChange={(e) => setDocumentType(e.target.value as 'BOOK' | 'DOCUMENT')} className="w-full rounded-2xl border border-red-100 px-4 py-3.5 text-sm font-bold outline-none focus:border-red-300 focus:ring-4 focus:ring-red-500/10">
                 <option value="BOOK">Book</option>
                 <option value="DOCUMENT">Document</option>
               </select>
@@ -117,9 +113,9 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, book, onClose, onSa
           </div>
 
           <div className="space-y-4">
-            <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Cover Image</label>
+            <label className="text-xs font-black uppercase tracking-widest text-slate-400">Cover Image</label>
             {previewUrl ? (
-              <div className="relative h-32 w-full overflow-hidden rounded-2xl border border-outline-variant bg-surface-variant/20">
+              <div className="relative h-32 w-full overflow-hidden rounded-2xl border border-red-100 bg-red-50/40">
                 <Image
                   src={previewUrl}
                   alt={title || 'Book cover preview'}
@@ -129,28 +125,28 @@ const AddBookModal: React.FC<AddBookModalProps> = ({ isOpen, book, onClose, onSa
                 />
               </div>
             ) : (
-              <div className="flex h-32 w-full items-center justify-center rounded-2xl border border-dashed border-outline-variant bg-surface-variant/20 text-sm font-semibold text-on-surface-variant">
+              <div className="flex h-32 w-full items-center justify-center rounded-2xl border border-dashed border-red-200 bg-red-50/40 text-sm font-bold text-slate-500">
                 No cover image selected.
               </div>
             )}
-            <input onChange={(e) => setImage(e.target.files?.[0] || null)} className="w-full rounded-xl border-outline-variant focus:border-primary focus:ring-primary/20 text-sm py-3.5 px-4" type="file" accept="image/*" />
+            <input onChange={(e) => setImage(e.target.files?.[0] || null)} className="w-full rounded-2xl border border-red-100 px-4 py-3.5 text-sm font-bold outline-none focus:border-red-300 focus:ring-4 focus:ring-red-500/10" type="file" accept="image/*" />
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Online Access URL</label>
-            <input value={bookOnlineUrl} onChange={(e) => setBookOnlineUrl(e.target.value)} className="w-full rounded-xl border-outline-variant focus:border-primary focus:ring-primary/20 text-sm py-3.5 px-4" placeholder="https://..." type="url" />
+            <label className="text-xs font-black uppercase tracking-widest text-slate-400">Online Access URL</label>
+            <input value={bookOnlineUrl} onChange={(e) => setBookOnlineUrl(e.target.value)} className="w-full rounded-2xl border border-red-100 px-4 py-3.5 text-sm font-bold outline-none focus:border-red-300 focus:ring-4 focus:ring-red-500/10" placeholder="https://..." type="url" />
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Document File</label>
-            <input onChange={(e) => setDocumentFile(e.target.files?.[0] || null)} className="w-full rounded-xl border-outline-variant focus:border-primary focus:ring-primary/20 text-sm py-3.5 px-4" type="file" />
+            <label className="text-xs font-black uppercase tracking-widest text-slate-400">Document File</label>
+            <input onChange={(e) => setDocumentFile(e.target.files?.[0] || null)} className="w-full rounded-2xl border border-red-100 px-4 py-3.5 text-sm font-bold outline-none focus:border-red-300 focus:ring-4 focus:ring-red-500/10" type="file" />
           </div>
 
-          <div className="sticky bottom-0 -mx-6 -mb-6 mt-2 flex gap-4 border-t border-outline-variant bg-white px-6 py-4">
-            <button type="button" onClick={onClose} className="flex-1 py-4 border-2 border-outline-variant text-on-surface-variant rounded-xl font-bold hover:bg-surface-variant transition-colors">
+          <div className="sticky bottom-0 -mx-6 -mb-6 mt-2 flex gap-4 border-t border-red-100 bg-white px-6 py-4">
+            <button type="button" onClick={onClose} className="flex-1 rounded-2xl border border-red-100 py-4 font-black text-slate-500 transition-colors hover:bg-red-50 hover:text-red-700">
               Cancel
             </button>
-            <button type="submit" className="flex-1 py-4 vibrant-gradient-bg text-white rounded-xl font-bold hover:brightness-110 active:scale-[0.98] transition-all shadow-md">
+            <button type="submit" className="flex-1 rounded-2xl bg-red-600 py-4 font-black text-white shadow-lg shadow-red-100 transition-all hover:bg-red-700 active:scale-[0.98]">
               {isEditMode ? 'Update Book' : 'Save Book'}
             </button>
           </div>

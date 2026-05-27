@@ -83,81 +83,73 @@ export default function BookDetailModal({
   // ========== RENDER ==========
   return (
     <>
-      {/* Modal Overlay and backdrop blur effect */}
       <div
-        className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-300 "
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm transition-opacity duration-300"
         onClick={onClose}
       >
-        {/* Modal Container */}
         <div data-aos="fade-in" data-aos-duration="300"
-          className="rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto scrollbar-hidden shadow-2xl relative"
-          onClick={(e) => e.stopPropagation()} // stop event to prevent closing modal
+          className="scrollbar-hidden relative max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-[2rem] border border-red-100 bg-white shadow-2xl"
+          onClick={(e) => e.stopPropagation()}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
-            {/* ========== LEFT SECTION: BOOK COVER IMAGE ========== */}
-            <div className="flex items-center justify-center bg-surface-variant rounded-xl overflow-hidden aspect-[3/4] md:aspect-auto">
+          <div className="grid grid-cols-1 gap-0 md:grid-cols-[0.9fr_1.1fr]">
+            <div className="relative flex min-h-[28rem] items-center justify-center overflow-hidden bg-red-50 p-5">
+              <div className="absolute left-[-5rem] top-[-5rem] h-56 w-56 rounded-full bg-red-200/70 blur-3xl" />
+              <div className="absolute bottom-[-6rem] right-[-4rem] h-64 w-64 rounded-full bg-rose-100 blur-3xl" />
               <img
                 src={selectedBook.coverImage}
                 alt={selectedBook.title}
-                className="w-full h-full object-cover"
+                className="relative h-full max-h-[34rem] w-full rounded-[1.5rem] object-cover shadow-2xl shadow-red-950/10"
               />
             </div>
 
-            {/* ========== RIGHT SECTION: BOOK DETAILS ========== */}
-            <div className="flex flex-col justify-between relative py-2">
-              {/* Close Button - FontAwesome icon */}
+            <div className="relative flex flex-col justify-between px-6 py-7 sm:px-8">
               <button
                 onClick={onClose}
-                className="absolute -top-4 -right-4 w-10 h-10 bg-surface-container hover:bg-error/10 hover:text-error rounded-full flex items-center justify-center text-on-surface-variant transition-colors z-10"
+                className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-red-100 bg-white text-slate-500 shadow-sm transition-colors hover:bg-red-50 hover:text-red-700"
                 aria-label="Close modal"
               >
                 <i className="fa-solid fa-xmark text-xl"></i>
               </button>
 
-              <div className="pr-6">
-                {/* Tags: Category & Year */}
-                <div className="flex items-center gap-3 mb-4 flex-wrap">
-                  <span className="bg-white/20 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-white/30">
+              <div className="pr-8">
+                <div className="mb-4 flex flex-wrap items-center gap-3">
+                  <span className="rounded-full border border-red-100 bg-red-50 px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-red-700">
                     {getBookCategoryLabel(selectedBook.category)}
                   </span>
-                  <span className="bg-black/20 text-white/70 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-white/10">
+                  <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
                     {selectedBook.year}
                   </span>
                 </div>
 
-                {/* Book Title */}
-                <h2 className="text-4xl font-headline font-extrabold text-white mb-2 leading-tight drop-shadow-sm">
+                <h2 className="mb-2 font-headline text-4xl font-black leading-tight tracking-[-0.04em] text-slate-950">
                   {selectedBook.title}
                 </h2>
 
-                {/* Author */}
-                <p className="text-xl font-bold text-white/80 mb-6">
+                <p className="mb-6 text-xl font-black text-red-700">
                   By {selectedBook.author}
                 </p>
 
-                {/* Availability Status - FontAwesome icons */}
-                <div className="flex items-center gap-2 mb-8 p-4 bg-white/5 rounded-xl border border-white/15">
-                  <i className="fa-solid fa-book text-black-500 text-lg"></i>
-                  <span className="font-medium text-white/70">Status:</span>
+                <div className="mb-8 flex items-center gap-2 rounded-2xl border border-red-100 bg-red-50/60 p-4">
+                  <i className="fa-solid fa-book text-lg text-red-500"></i>
+                  <span className="font-bold text-slate-500">Status:</span>
                   {selectedBook.isAvailable ? (
-                    <span className="font-bold text-green-600 flex items-center gap-1">
+                    <span className="flex items-center gap-1 font-black text-emerald-600">
                       <i className="fa-solid fa-circle-check text-sm"></i>
                       Available for Request
                     </span>
                   ) : (
-                    <span className="font-bold text-rose-300 flex items-center gap-1">
+                    <span className="flex items-center gap-1 font-black text-red-700">
                       <i className="fa-solid fa-circle-xmark text-sm"></i>
                       Currently Borrowed
                     </span>
                   )}
                 </div>
 
-                {/* Book Description/Synopsis */}
                 <div className="mb-8">
-                  <h3 className="font-headline font-bold text-lg text-white mb-3">
+                  <h3 className="mb-3 font-headline text-lg font-black text-slate-950">
                     Synopsis
                   </h3>
-                  <p className="text-white/65 leading-relaxed font-body">
+                  <p className="font-body leading-relaxed text-slate-600">
                     {selectedBook.description}
                   </p>
                 </div>
@@ -168,7 +160,7 @@ export default function BookDetailModal({
                   <button
                     onClick={() => handleAction('OFFLINE')}
                     disabled={isSubmitting}
-                    className="w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all vibrant-gradient-bg text-on-primary hover:shadow-lg hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-red-600 py-4 font-black text-white shadow-lg shadow-red-100 transition-all hover:bg-red-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {isSubmitting ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-book-bookmark"></i>}
                     Borrow Offline
@@ -177,7 +169,7 @@ export default function BookDetailModal({
                   <button
                     onClick={() => handleAction('HOLD')}
                     disabled={isSubmitting}
-                    className="w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all vibrant-gradient-bg text-on-primary hover:shadow-lg hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-red-600 py-4 font-black text-white shadow-lg shadow-red-100 transition-all hover:bg-red-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {isSubmitting ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-clock"></i>}
                     Place Hold
@@ -188,7 +180,7 @@ export default function BookDetailModal({
                   <button
                     onClick={() => handleAction('ONLINE')}
                     disabled={isSubmitting}
-                    className="w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all border border-white/30 text-white hover:bg-white/10 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                    className="flex w-full items-center justify-center gap-2 rounded-2xl border border-red-200 py-4 font-black text-red-700 transition-all hover:bg-red-50 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {isSubmitting ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-globe"></i>}
                     Read Online
