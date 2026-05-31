@@ -110,7 +110,7 @@ export default function AdminUsersPage() {
   };
 
   return (
-    <div className="bg-surface font-body text-on-surface min-h-screen">
+    <div className="bg-[#f4f0e8] font-body text-on-surface min-h-screen">
       <Header role="admin" />
       <main className="app-shell-main app-shell-content page-shell px-6 md:px-8 xl:px-10 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-10">
@@ -126,18 +126,18 @@ export default function AdminUsersPage() {
               <div className="text-xs uppercase tracking-widest text-on-surface-variant font-bold">Active</div>
             </div>
             <div className="bg-white rounded-2xl border border-outline-variant p-4 shadow-sm">
-              <div className="text-2xl font-extrabold text-error">{inactiveCount}</div>
+              <div className="text-2xl font-extrabold text-on-error-container">{inactiveCount}</div>
               <div className="text-xs uppercase tracking-widest text-on-surface-variant font-bold">Inactive</div>
             </div>
             <div className="bg-white rounded-2xl border border-outline-variant p-4 shadow-sm">
-              <div className="text-2xl font-extrabold text-secondary">{adminCount}</div>
+              <div className="text-2xl font-extrabold text-primary">{adminCount}</div>
               <div className="text-xs uppercase tracking-widest text-on-surface-variant font-bold">Admins</div>
             </div>
           </div>
         </div>
 
         {error && (
-          <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-600 font-semibold">
+          <div className="mb-6 rounded-2xl border border-error-container bg-error-container p-4 text-on-error-container font-semibold">
             {error}
           </div>
         )}
@@ -155,7 +155,7 @@ export default function AdminUsersPage() {
               <option value="STUDENT">Student</option>
               <option value="ADMIN">Admin</option>
             </select>
-            <button className="vibrant-gradient-bg text-white px-6 py-3 rounded-xl font-bold w-full shadow-md shadow-primary/20 hover:brightness-110 transition-all">
+            <button className="bg-primary text-on-primary px-6 py-3 rounded-xl font-bold w-full shadow-md shadow-primary/20 hover:bg-[#274c42] transition-all">
               Create User
             </button>
           </form>
@@ -226,7 +226,7 @@ export default function AdminUsersPage() {
                                   Active
                                 </label>
                               ) : (
-                                <span className={`rounded-full px-3 py-1 text-xs font-extrabold ${user.isActive ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                                <span className={`rounded-full px-3 py-1 text-xs font-extrabold ${user.isActive ? 'bg-primary-container text-on-primary-container' : 'bg-error-container text-on-error-container'}`}>
                                   {user.isActive ? 'ACTIVE' : 'INACTIVE'}
                                 </span>
                               )}
@@ -244,7 +244,7 @@ export default function AdminUsersPage() {
                                   {user.isActive ? (
                                     <button onClick={() => setUserToDeactivate(user)} className="px-4 py-2 rounded-lg bg-error/10 text-error font-bold">Deactivate</button>
                                   ) : (
-                                    <button onClick={() => setUserToReactivate(user)} className="px-4 py-2 rounded-lg bg-green-50 text-green-700 font-bold">Reactivate</button>
+                                    <button onClick={() => setUserToReactivate(user)} className="px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-bold">Reactivate</button>
                                   )}
                                 </>
                               )}

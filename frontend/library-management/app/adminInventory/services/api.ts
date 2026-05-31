@@ -99,10 +99,10 @@ export const adminInventoryService = {
     return Array.isArray(data) ? data : data.items || [];
   },
 
-  getRooms: async (date?: string, timeSlotId?: string): Promise<RoomState[]> => {
-    if (date && timeSlotId) {
+  getRooms: async (timeSlotId?: string): Promise<RoomState[]> => {
+    if (timeSlotId) {
       const data = await apiFetch<any>('/api/rooms/occupancy-rooms', {
-        params: { date, timeSlotId }
+        params: { timeSlotId }
       });
 
       return getCollection<any>(data).map((room: any) => ({

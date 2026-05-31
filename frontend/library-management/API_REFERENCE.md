@@ -212,8 +212,8 @@ Route prefix: `/api/rooms`
 | Method | Route | Auth | Request | Response |
 | --- | --- | --- | --- | --- |
 | `GET` | `/api/rooms` | User | none | `IReadOnlyList<RoomResponseDto>` |
-| `GET` | `/api/rooms/availability-room?date=&timeSlotId=` | User | query | `IReadOnlyList<RoomAvailabilityResponseDto>` |
-| `GET` | `/api/rooms/occupancy-rooms?date=&timeSlotId=` | Admin | query | `IReadOnlyList<RoomOccupancyResponseDto>` |
+| `GET` | `/api/rooms/availability-room?timeSlotId=` | User | query | `IReadOnlyList<RoomAvailabilityResponseDto>` |
+| `GET` | `/api/rooms/occupancy-rooms?timeSlotId=` | Admin | query | `IReadOnlyList<RoomOccupancyResponseDto>` |
 | `PATCH` | `/api/rooms/{id}` | Admin | `RoomRequestDto` | `RoomResponseDto` |
 | `DELETE` | `/api/rooms/{id}` | Admin | none | `204 No Content` |
 | `POST` | `/api/rooms` | Admin | `RoomRequestDto` | `RoomResponseDto` |
@@ -254,7 +254,8 @@ DTOs: `DTOs/RoomReservations`
 Logic:
 
 - Creating a room reservation generates a unique 8-character `AccessCode`.
-- The user receives the code through `/api/notifications/me` with notification type `ROOM_ACCESS_CODE`.
+- Reservation duplicate and capacity checks use only room/time slot, not the current date.
+- The user receives a plain `Room code: {AccessCode}` notification through `/api/notifications/me` with type `ROOM_ACCESS_CODE`.
 - The code is also returned in reservation responses for the reservation owner/admin flows.
 
 ## Time Slots
@@ -277,8 +278,8 @@ DTOs: `DTOs/TimeSlots`
 
 Logic:
 
-- `GET /api/time-slots` returns only slots whose `StartTime` is later than the backend server's current local time.
-- A background cleanup runs at startup and every minute. It deletes expired time slots only when no room reservation references them, preserving reservation history.
+- `GET /api/time-slots` returns all slots ordered by `StartTime`.
+- The background cleanup no longer deletes time slots based on the backend server's current local time.
 
 ## Models Added
 

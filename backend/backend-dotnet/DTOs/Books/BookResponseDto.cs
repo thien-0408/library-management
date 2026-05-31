@@ -27,4 +27,8 @@ public class BookResponseDto
     public BookStatus Status { get; set; }
 
     public DocumentType DocumentType { get; set; }
+
+    public double? AverageRating { get; set; }
+
+    public int TotalReviews { get; set; }
 }

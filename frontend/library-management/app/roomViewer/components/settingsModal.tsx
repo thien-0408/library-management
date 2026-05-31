@@ -26,7 +26,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, initialH
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 animate-in fade-in duration-200">
       <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
         <div className="px-8 py-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
           <h2 className="font-headline font-bold text-xl">Operating Hours</h2>
@@ -52,7 +52,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, initialH
           </div>
 
           <div className="pt-6">
-            <button type="submit" className="w-full py-4 vibrant-gradient-bg text-white rounded-xl font-bold hover:brightness-110 active:scale-[0.98] transition-all shadow-md">
+            <button type="submit" className="w-full py-4 bg-primary text-on-primary rounded-xl font-bold hover:bg-[#274c42] active:scale-[0.98] transition-all shadow-md">
               Save Changes
             </button>
           </div>

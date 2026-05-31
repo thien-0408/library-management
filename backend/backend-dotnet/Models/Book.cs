@@ -39,4 +39,6 @@ public class Book
     public ICollection<BorrowBookRequest> PendingRequests { get; set; } = new List<BorrowBookRequest>();
 
     public ICollection<BookHold> Holds { get; set; } = new List<BookHold>();
+
+    public ICollection<BookReview> Reviews { get; set; } = new List<BookReview>();
 }

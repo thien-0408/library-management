@@ -66,13 +66,11 @@ export default function CatalogPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fff7f7] font-body text-slate-950">
+    <div className="min-h-screen bg-[#f4f0e8] font-body text-slate-950">
       <Header />
 
       <main className="app-shell-main app-shell-content page-shell mx-auto w-full max-w-7xl flex-grow px-5 pb-16 md:px-8">
         <header data-aos="fade-in" data-aos-duration="300" className="relative mb-8 overflow-hidden rounded-[2.25rem] border border-red-100 bg-white px-6 py-8 shadow-[0_24px_80px_-48px_rgba(153,27,27,0.45)] sm:px-8 lg:px-10 lg:py-10">
-          <div className="absolute right-[-5rem] top-[-6rem] h-72 w-72 rounded-full bg-red-200/55 blur-3xl" />
-          <div className="absolute bottom-[-7rem] left-1/2 h-64 w-64 rounded-full bg-rose-100 blur-3xl" />
           <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-red-100 bg-red-50 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-red-700">

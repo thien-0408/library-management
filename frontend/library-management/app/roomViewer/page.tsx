@@ -72,7 +72,7 @@ export default function AdminRoomViewerPage() {
   };
 
   return (
-    <div className="bg-surface font-body text-on-surface min-h-screen">
+    <div className="bg-[#f4f0e8] font-body text-on-surface min-h-screen">
       <Header />
 
       <main className="app-shell-main app-shell-content page-shell px-6 md:px-8 xl:px-10 max-w-[1600px] mx-auto">
@@ -88,7 +88,7 @@ export default function AdminRoomViewerPage() {
 
           <button
             onClick={openAddModal}
-            className="vibrant-gradient-bg text-white px-6 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2.5 shadow-md shadow-primary/20 hover:shadow-lg hover:brightness-110 transition-all active:scale-95"
+            className="bg-primary text-on-primary px-6 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2.5 shadow-md shadow-primary/20 hover:shadow-lg hover:bg-[#274c42] transition-all active:scale-95"
           >
             <i className="fa-solid fa-plus text-lg"></i>
             <span>New Room</span>

@@ -10,29 +10,26 @@ interface TimeSlotOption {
 interface RoomStateViewerProps {
   rooms: RoomState[];
   timeSlots: TimeSlotOption[];
-  selectedDate: string;
   selectedTimeSlotId: string;
-  onDateChange: (date: string) => void;
   onTimeSlotChange: (timeSlotId: string) => void;
 }
 
 const getRoomColor = (status: RoomState['status']) => {
   if (status === 'Light') return { bg: 'bg-emerald-50', border: 'border-emerald-100', text: 'text-emerald-900', num: 'text-emerald-600', dot: 'bg-emerald-500' };
   if (status === 'Moderate') return { bg: 'bg-amber-50', border: 'border-amber-100', text: 'text-amber-900', num: 'text-amber-600', dot: 'bg-amber-400' };
-  return { bg: 'bg-rose-50', border: 'border-rose-100', text: 'text-rose-900', num: 'text-rose-600', dot: 'bg-rose-500' };
+  return { bg: 'bg-error-container', border: 'border-error-container', text: 'text-on-error-container', num: 'text-on-error-container', dot: 'bg-error' };
 };
 
-const RoomStateViewer: React.FC<RoomStateViewerProps> = ({ rooms, timeSlots, selectedDate, selectedTimeSlotId, onDateChange, onTimeSlotChange }) => {
+const RoomStateViewer: React.FC<RoomStateViewerProps> = ({ rooms, timeSlots, selectedTimeSlotId, onTimeSlotChange }) => {
   return (
-    <div className="rounded-[2rem] border border-red-100 bg-white p-8 shadow-[0_18px_55px_-42px_rgba(153,27,27,0.55)]">
+    <div className="rounded-[2rem] border border-outline-variant bg-[var(--catalog-panel)] p-8 shadow-soft-card">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
         <div>
-          <h3 className="font-headline text-xl font-black text-slate-950">Room State Viewer</h3>
-          <p className="mt-1 text-sm font-medium text-slate-500">Real-time study room occupancy monitoring</p>
+          <h3 className="font-headline text-xl font-black text-on-surface">Room State Viewer</h3>
+          <p className="mt-1 text-sm font-medium text-on-surface-variant">Study room occupancy by reusable time slot</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
-          <input type="date" value={selectedDate} onChange={(e) => onDateChange(e.target.value)} className="rounded-2xl border border-red-100 px-3 py-2 text-sm font-bold text-slate-600 outline-none focus:border-red-300 focus:ring-4 focus:ring-red-500/10" />
-          <select value={selectedTimeSlotId} onChange={(e) => onTimeSlotChange(e.target.value)} className="rounded-2xl border border-red-100 px-3 py-2 text-sm font-bold text-slate-600 outline-none focus:border-red-300 focus:ring-4 focus:ring-red-500/10">
+          <select value={selectedTimeSlotId} onChange={(e) => onTimeSlotChange(e.target.value)} className="rounded-2xl border border-outline-variant bg-white/80 px-3 py-2 text-sm font-bold text-on-surface outline-none focus:border-primary focus:ring-4 focus:ring-primary/15">
             {timeSlots.map(slot => (
               <option key={slot.id} value={slot.id}>{slot.startTime} - {slot.endTime}</option>
             ))}

@@ -98,6 +98,31 @@ public class AuthService(
         return MapToRegisterResponse(user);
     }
 
+    public async Task<ChangePasswordResponseDto> ChangePasswordAsync(Guid userId, ChangePasswordRequestDto request)
+    {
+        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId && x.IsActive);
+        if (user is null)
+        {
+            throw new KeyNotFoundException("User not found.");
+        }
+
+        var verifyResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash ?? string.Empty, request.CurrentPassword);
+        if (verifyResult == PasswordVerificationResult.Failed)
+        {
+            throw new UnauthorizedAccessException("Mật khẩu hiện tại không chính xác.");
+        }
+
+        user.PasswordHash = passwordHasher.HashPassword(user, request.NewPassword);
+        await dbContext.SaveChangesAsync();
+
+        logger.LogInformation("User {UserId} changed password successfully.", user.Id);
+
+        return new ChangePasswordResponseDto
+        {
+            Message = "Đổi mật khẩu thành công."
+        };
+    }
+
     private static RegisterResponseDto MapToRegisterResponse(User user)
     {
         return new RegisterResponseDto

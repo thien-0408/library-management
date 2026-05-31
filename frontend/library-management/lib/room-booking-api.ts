@@ -60,14 +60,14 @@ export const roomBookingApi = {
       method: 'DELETE',
     }),
 
-  getRoomAvailability: (date: string, timeSlotId: string) =>
+  getRoomAvailability: (timeSlotId: string) =>
     apiFetch<RoomAvailabilityResponseDto[]>('/api/rooms/availability-room', {
-      params: { date, timeSlotId },
+      params: { timeSlotId },
     }),
 
-  getRoomOccupancy: (date: string, timeSlotId: string) =>
+  getRoomOccupancy: (timeSlotId: string) =>
     apiFetch<RoomOccupancyResponseDto[]>('/api/rooms/occupancy-rooms', {
-      params: { date, timeSlotId },
+      params: { timeSlotId },
     }),
 
   createReservation: (payload: CreateRoomReservationRequestDto) =>
@@ -96,6 +96,8 @@ export const roomBookingApi = {
     }),
 
   getReservations: () => apiFetch<RoomReservationResponseDto[]>('/api/room-reservations'),
+
+  getMyReservations: () => apiFetch<RoomReservationResponseDto[]>('/api/room-reservations/me'),
 
   deleteReservation: (id: string) =>
     apiFetch<void>(`/api/room-reservations/${id}`, {

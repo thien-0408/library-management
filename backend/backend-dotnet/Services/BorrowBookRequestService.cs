@@ -11,6 +11,7 @@ public class BorrowBookRequestService(
     LibraryManagementDbContext dbContext,
     IBookHoldService bookHoldService,
     INotificationService notificationService,
+    IGamificationService gamificationService,
     ILogger<BorrowBookRequestService> logger) : IBorrowBookRequestService
 {
     private const int BorrowPeriodDays = 14;
@@ -119,6 +120,7 @@ public class BorrowBookRequestService(
         await dbContext.SaveChangesAsync();
 
         await SendBorrowNotificationAsync(user.Id, book.Title, borrowRequest);
+        await gamificationService.RecordBookBorrowAsync(user.Id);
 
         logger.LogInformation("Created borrow request {RequestId} for user {UserId} and book {BookId}.", borrowRequest.Id, user.Id, book.Id);
         return MapToResponse(borrowRequest);

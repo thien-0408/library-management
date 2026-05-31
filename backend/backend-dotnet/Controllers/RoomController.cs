@@ -19,11 +19,11 @@ public class RoomController(IRoomService roomService) : ControllerBase
 
     [HttpGet("availability-room")]
     [Authorize]
-    public async Task<ActionResult<IReadOnlyList<RoomAvailabilityResponseDto>>> GetAvailabilityRooms([FromQuery] DateOnly date, [FromQuery] Guid timeSlotId)
+    public async Task<ActionResult<IReadOnlyList<RoomAvailabilityResponseDto>>> GetAvailabilityRooms([FromQuery] Guid timeSlotId)
     {
         try
         {
-            var result = await roomService.GetAvailabilityAsync(date, timeSlotId);
+            var result = await roomService.GetAvailabilityAsync(timeSlotId);
             return Ok(result);
         }
         catch (KeyNotFoundException ex)
@@ -38,11 +38,11 @@ public class RoomController(IRoomService roomService) : ControllerBase
 
     [HttpGet("occupancy-rooms")]
     [Authorize(Roles = "ADMIN")]
-    public async Task<ActionResult<IReadOnlyList<RoomOccupancyResponseDto>>> GetRoomOccupancy([FromQuery] DateOnly date, [FromQuery] Guid timeSlotId)
+    public async Task<ActionResult<IReadOnlyList<RoomOccupancyResponseDto>>> GetRoomOccupancy([FromQuery] Guid timeSlotId)
     {
         try
         {
-            var result = await roomService.GetOccupancyAsync(date, timeSlotId);
+            var result = await roomService.GetOccupancyAsync(timeSlotId);
             return Ok(result);
         }
         catch (KeyNotFoundException ex)

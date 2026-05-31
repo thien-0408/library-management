@@ -21,10 +21,9 @@ export default function AdminInventoryPage() {
     requests,
     rooms,
     timeSlots,
-    selectedDate,
     selectedTimeSlotId,
-    setSelectedDate,
     setSelectedTimeSlotId,
+    stats,
     isLoading,
     error,
     handleApproveRequest,
@@ -38,7 +37,6 @@ export default function AdminInventoryPage() {
   const [editingBook, setEditingBook] = useState<InventoryBook | null>(null);
   const [bookToDelete, setBookToDelete] = useState<string | null>(null);
   const { toastConfig, showToast, hideToast } = useToast();
-
   const addNotification = (title: string, description: string, type: 'success' | 'error' | 'info') => {
     showToast(title, description, type);
   };
@@ -100,26 +98,25 @@ export default function AdminInventoryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fff7f7] font-body text-slate-950">
+    <div className="min-h-screen bg-[#f4f0e8] font-body text-on-surface">
       <Header />
 
       <main className="app-shell-main app-shell-content page-shell mx-auto max-w-[1600px] px-5 pb-16 md:px-8 xl:px-10">
-        <div className="relative mb-10 overflow-hidden rounded-[2.25rem] border border-red-100 bg-white px-6 py-8 shadow-[0_24px_80px_-48px_rgba(153,27,27,0.45)] sm:px-8 lg:px-10">
-          <div className="absolute right-[-5rem] top-[-6rem] h-72 w-72 rounded-full bg-red-200/55 blur-3xl" />
+        <div className="relative mb-10 overflow-hidden rounded-[2.25rem] border border-outline-variant bg-white px-6 py-8 shadow-soft-card sm:px-8 lg:px-10">
           <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-red-100 bg-red-50 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-red-700">
-                <span className="h-2 w-2 rounded-full bg-red-600" />
+              <div className="inline-flex items-center gap-2 rounded-full border border-outline-variant bg-primary-container px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-on-primary-container">
+                <span className="h-2 w-2 rounded-full bg-primary" />
                 Admin command
               </div>
-              <h1 className="mt-5 font-headline text-5xl font-black leading-[0.95] tracking-[-0.055em] text-slate-950">Catalog Management</h1>
-              <p className="mt-4 max-w-2xl text-lg font-medium leading-8 text-slate-600">
+              <h1 className="mt-5 font-headline text-5xl font-black leading-[0.95] tracking-[-0.055em] text-on-surface">Catalog Management</h1>
+              <p className="mt-4 max-w-2xl text-lg font-medium leading-8 text-on-surface-variant">
                 Manage the library physical collection, approve borrow requests, and monitor study room capacity in real time.
               </p>
             </div>
             <button
               onClick={openAddModal}
-              className="flex items-center justify-center gap-2.5 rounded-full bg-red-600 px-6 py-3.5 font-black text-white shadow-lg shadow-red-200 transition-all hover:-translate-y-0.5 hover:bg-red-700 active:scale-95"
+              className="flex items-center justify-center gap-2.5 rounded-full bg-primary px-6 py-3.5 font-black text-on-primary shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5 hover:bg-[#274c42] active:scale-95"
             >
               <i className="fa-solid fa-plus text-lg"></i>
               <span>New Book</span>
@@ -128,7 +125,7 @@ export default function AdminInventoryPage() {
         </div>
 
         {error && (
-            <div className="mb-8 rounded-[1.5rem] border border-red-100 bg-white px-6 py-5 text-center font-bold text-red-700 shadow-sm">
+            <div className="mb-8 rounded-[1.5rem] border border-error-container bg-error-container px-6 py-5 text-center font-bold text-on-error-container shadow-sm">
                 <i className="fa-solid fa-triangle-exclamation mr-2"></i>
                 {error}
             </div>
@@ -144,9 +141,7 @@ export default function AdminInventoryPage() {
               <RoomStateViewer
                 rooms={rooms}
                 timeSlots={timeSlots}
-                selectedDate={selectedDate}
                 selectedTimeSlotId={selectedTimeSlotId}
-                onDateChange={setSelectedDate}
                 onTimeSlotChange={setSelectedTimeSlotId}
               />
             </div>
@@ -154,24 +149,26 @@ export default function AdminInventoryPage() {
             {/* RIGHT COLUMN */}
             <div className="col-span-12 space-y-8 lg:col-span-4">
               <RequestQueue requests={requests} onApprove={onApprove} onReject={onReject} />
-              
-              {/* Traffic Chart */}
-              <div className="group relative overflow-hidden rounded-[2rem] bg-red-600 p-8 text-white shadow-xl shadow-red-200">
-                  <div className="relative z-10">
-                       <h4 className="font-headline font-bold text-xl">Today&apos;s Traffic</h4>
-                      <p className="text-white/80 text-sm mt-1 font-medium">Peak hours expected at 4:00 PM</p>
-                      <div className="flex items-end gap-3 h-28 mt-8">
-                          <div className="w-full bg-white/20 rounded-t-md h-[40%] group-hover:h-[60%] transition-all duration-500"></div>
-                          <div className="w-full bg-white/30 rounded-t-md h-[70%] group-hover:h-[80%] transition-all duration-500 delay-75"></div>
-                          <div className="w-full bg-white/40 rounded-t-md h-[30%] group-hover:h-[45%] transition-all duration-500 delay-100"></div>
-                          <div className="w-full bg-white rounded-t-md h-[95%] group-hover:h-full transition-all duration-500 shadow-[0_0_15px_rgba(255,255,255,0.5)]"></div>
-                          <div className="w-full bg-white/60 rounded-t-md h-[60%] group-hover:h-[75%] transition-all duration-500 delay-200"></div>
-                          <div className="w-full bg-white/30 rounded-t-md h-[45%] group-hover:h-[55%] transition-all duration-500 delay-300"></div>
-                      </div>
-                  </div>
-                  <div className="absolute -right-8 -bottom-8 w-48 h-48 bg-white/20 rounded-full blur-3xl"></div>
-              </div>
 
+              {/* Dashboard Stats */}
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="rounded-[1.5rem] bg-white p-6 shadow-sm border border-outline-variant">
+                  <p className="text-sm font-bold text-on-surface-variant">Active Users</p>
+                  <p className="mt-2 text-3xl font-black text-on-surface">{stats?.activeUsers || 0}</p>
+                </div>
+                <div className="rounded-[1.5rem] bg-white p-6 shadow-sm border border-outline-variant">
+                  <p className="text-sm font-bold text-on-surface-variant">Total Books</p>
+                  <p className="mt-2 text-3xl font-black text-on-surface">{stats?.totalBooks || 0}</p>
+                </div>
+                <div className="rounded-[1.5rem] bg-white p-6 shadow-sm border border-outline-variant">
+                  <p className="text-sm font-bold text-on-surface-variant">Borrowed Books</p>
+                  <p className="mt-2 text-3xl font-black text-on-surface">{stats?.borrowedBooks || 0}</p>
+                </div>
+                <div className="rounded-[1.5rem] bg-white p-6 shadow-sm border border-outline-variant">
+                  <p className="text-sm font-bold text-on-surface-variant">Total Reviews</p>
+                  <p className="mt-2 text-3xl font-black text-on-surface">{stats?.totalBookReviews || 0}</p>
+                </div>
+              </div>
             </div>
           </div>
         )}

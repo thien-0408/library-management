@@ -72,7 +72,7 @@ export default function Home() {
     damping: 24,
     mass: 0.4,
   });
-  const glow = useMotionTemplate`radial-gradient(560px circle at ${smoothX}px ${smoothY}px, rgba(248, 113, 113, 0.22), transparent 44%)`;
+  const glow = useMotionTemplate`radial-gradient(560px circle at ${smoothX}px ${smoothY}px, rgba(240, 211, 172, 0.24), transparent 44%)`;
 
   return (
     <main
@@ -86,14 +86,14 @@ export default function Home() {
         className="pointer-events-none fixed inset-0 z-0"
         style={{ background: glow }}
       />
-      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_left,rgba(220,38,38,0.42),transparent_32%),radial-gradient(circle_at_78%_12%,rgba(251,146,60,0.18),transparent_25%),linear-gradient(180deg,#080605_0%,#160b09_46%,#080605_100%)]" />
+      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_left,rgba(240,211,172,0.34),transparent_32%),radial-gradient(circle_at_78%_12%,rgba(240,211,172,0.18),transparent_25%),linear-gradient(180deg,#080605_0%,#15100b_46%,#080605_100%)]" />
       <div className="pointer-events-none absolute inset-0 z-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.8)_1px,transparent_1px)] [background-size:72px_72px]" />
 
       <div className="relative z-10">
         <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-10">
           <Link href="/" className="group flex items-center gap-3">
-            <div className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/10 shadow-2xl shadow-red-950/40 backdrop-blur">
-              <span className="h-4 w-4 rounded-full bg-red-500 shadow-[0_0_24px_rgba(239,68,68,.9)] transition group-hover:scale-125" />
+            <div className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/10 shadow-2xl shadow-[#f0d3ac]/20 backdrop-blur">
+              <span className="h-4 w-4 rounded-full bg-[#f0d3ac] shadow-[0_0_24px_rgba(240,211,172,.72)] transition group-hover:scale-125" />
             </div>
             <div>
               <p className="text-lg font-black tracking-tight">OpenBook</p>
@@ -124,7 +124,7 @@ export default function Home() {
             </Link>
             <Link
               href="/register"
-              className="rounded-full bg-orange-50 px-5 py-2.5 text-sm font-black text-[#160b09] shadow-[0_12px_40px_rgba(248,113,113,.24)] transition hover:-translate-y-0.5 hover:bg-white"
+              className="rounded-full bg-[#f0d3ac] px-5 py-2.5 text-sm font-black text-[#160b09] shadow-[0_12px_40px_rgba(240,211,172,.24)] transition hover:-translate-y-0.5 hover:bg-[#f8e4c6]"
             >
               Enter archive
             </Link>
@@ -138,7 +138,7 @@ export default function Home() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="inline-flex items-center gap-3 rounded-full border border-white/12 bg-white/[0.06] px-4 py-2 text-xs font-black uppercase tracking-[0.26em] text-orange-100/65 backdrop-blur">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-red-400" />
+              <span className="h-2 w-2 animate-pulse rounded-full bg-[#f0d3ac]" />
               Library system reimagined
             </div>
 
@@ -155,7 +155,7 @@ export default function Home() {
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/register"
-                className="group inline-flex items-center justify-center rounded-full bg-[#f43f2f] px-7 py-4 text-base font-black text-white shadow-[0_22px_70px_rgba(244,63,47,.34)] transition hover:-translate-y-1 hover:bg-[#ff523f]"
+                className="group inline-flex items-center justify-center rounded-full bg-[#f0d3ac] px-7 py-4 text-base font-black text-[#160b09] shadow-[0_22px_70px_rgba(240,211,172,.32)] transition hover:-translate-y-1 hover:bg-[#f8e4c6]"
               >
                 Start exploring
                 <span className="ml-3 transition group-hover:translate-x-1">
@@ -177,7 +177,7 @@ export default function Home() {
             transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="relative"
           >
-            <div className="absolute -inset-8 rounded-[3rem] bg-red-500/20 blur-3xl" />
+            <div className="absolute -inset-8 rounded-[3rem] bg-[#f0d3ac]/20 blur-3xl" />
             <div className="relative overflow-hidden rounded-[2.4rem] border border-white/12 bg-white/[0.07] p-3 shadow-2xl shadow-black/50 backdrop-blur-xl">
               <div className="relative overflow-hidden rounded-[2rem]">
                 <Image
@@ -259,7 +259,7 @@ export default function Home() {
           className="mx-auto w-full max-w-7xl px-5 py-24 sm:px-8 lg:px-10"
         >
           <div className="max-w-3xl">
-            <p className="text-sm font-black uppercase tracking-[0.32em] text-red-300/80">
+            <p className="text-sm font-black uppercase tracking-[0.32em] text-[#f0d3ac]/80">
               Interactive systems
             </p>
             <h2 className="mt-4 text-4xl font-black tracking-[-0.05em] sm:text-6xl">
@@ -282,7 +282,7 @@ export default function Home() {
                 className="group relative min-h-80 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.055] p-7 backdrop-blur-xl"
               >
                 <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-orange-100/60 to-transparent" />
-                <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-red-500/18 blur-3xl transition group-hover:bg-orange-400/25" />
+                <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[#f0d3ac]/18 blur-3xl transition group-hover:bg-[#f0d3ac]/28" />
                 <p className="text-[10px] font-black uppercase tracking-[0.32em] text-orange-100/45">
                   {feature.meta}
                 </p>
@@ -340,7 +340,7 @@ export default function Home() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/register"
-                  className="rounded-full bg-red-500 px-6 py-3.5 text-center text-sm font-black text-white transition hover:bg-red-400"
+                  className="rounded-full bg-[#f0d3ac] px-6 py-3.5 text-center text-sm font-black text-[#180d09] transition hover:bg-[#f8e4c6]"
                 >
                   Create account
                 </Link>
@@ -359,7 +359,7 @@ export default function Home() {
                   whileHover={{ y: -8 }}
                   className="rounded-[1.7rem] border border-black/10 bg-white/55 p-6 shadow-sm"
                 >
-                  <p className="text-sm font-black text-red-600">
+                  <p className="text-sm font-black text-[#8a6432]">
                     0{index + 1}
                   </p>
                   <p className="mt-14 text-2xl font-black tracking-tight">

@@ -50,7 +50,7 @@ export default function RegisterPage() {
     damping: 24,
     mass: 0.4,
   });
-  const glow = useMotionTemplate`radial-gradient(520px circle at ${smoothX}px ${smoothY}px, rgba(248, 113, 113, 0.22), transparent 44%)`;
+  const glow = useMotionTemplate`radial-gradient(520px circle at ${smoothX}px ${smoothY}px, rgba(240, 211, 172, 0.24), transparent 44%)`;
 
   const redirectToLogin = () => {
     window.setTimeout(() => {
@@ -97,7 +97,7 @@ export default function RegisterPage() {
         className="pointer-events-none fixed inset-0 z-0"
         style={{ background: glow }}
       />
-      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_left,rgba(220,38,38,0.4),transparent_34%),radial-gradient(circle_at_82%_18%,rgba(251,146,60,0.18),transparent_28%),linear-gradient(180deg,#080605_0%,#160b09_54%,#080605_100%)]" />
+      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_left,rgba(240,211,172,0.34),transparent_34%),radial-gradient(circle_at_82%_18%,rgba(240,211,172,0.18),transparent_28%),linear-gradient(180deg,#080605_0%,#15100b_54%,#080605_100%)]" />
       <div className="pointer-events-none absolute inset-0 z-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.8)_1px,transparent_1px)] [background-size:72px_72px]" />
 
       <motion.div
@@ -110,7 +110,7 @@ export default function RegisterPage() {
           <div className="w-full max-w-md">
             <Link href="/" className="mb-10 flex items-center gap-3">
               <span className="grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-white/10">
-                <span className="h-3.5 w-3.5 rounded-full bg-red-500 shadow-[0_0_20px_rgba(239,68,68,.8)]" />
+                <span className="h-3.5 w-3.5 rounded-full bg-[#f0d3ac] shadow-[0_0_20px_rgba(240,211,172,.72)]" />
               </span>
               <span>
                 <span className="block text-lg font-black">OpenBook</span>
@@ -120,7 +120,7 @@ export default function RegisterPage() {
               </span>
             </Link>
 
-            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-red-300/75">
+            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-[#f0d3ac]/75">
               Archive onboarding
             </p>
             <h1 className="mt-4 text-4xl font-black tracking-[-0.05em] sm:text-5xl">
@@ -132,7 +132,7 @@ export default function RegisterPage() {
             </p>
 
             {errorMsg && (
-              <div className="mt-6 rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm font-bold text-red-100">
+              <div className="mt-6 rounded-2xl border border-[#f0d3ac]/30 bg-[#f0d3ac]/10 px-4 py-3 text-sm font-bold text-[#f8e4c6]">
                 {errorMsg}
               </div>
             )}
@@ -147,7 +147,7 @@ export default function RegisterPage() {
                   value={userFullName}
                   onChange={(e) => setUserFullName(e.target.value)}
                   placeholder="Enter your full name"
-                  className="w-full rounded-2xl border border-white/10 bg-white/[0.07] px-5 py-4 text-sm font-bold text-orange-50 outline-none transition placeholder:text-orange-100/28 focus:border-red-300/50 focus:bg-white/[0.1] focus:ring-4 focus:ring-red-500/10"
+                  className="w-full rounded-2xl border border-white/10 bg-white/[0.07] px-5 py-4 text-sm font-bold text-orange-50 outline-none transition placeholder:text-orange-100/28 focus:border-[#f0d3ac]/60 focus:bg-white/[0.1] focus:ring-4 focus:ring-[#f0d3ac]/10"
                   required
                 />
               </div>
@@ -161,7 +161,7 @@ export default function RegisterPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="curator@openbook.archive"
-                  className="w-full rounded-2xl border border-white/10 bg-white/[0.07] px-5 py-4 text-sm font-bold text-orange-50 outline-none transition placeholder:text-orange-100/28 focus:border-red-300/50 focus:bg-white/[0.1] focus:ring-4 focus:ring-red-500/10"
+                  className="w-full rounded-2xl border border-white/10 bg-white/[0.07] px-5 py-4 text-sm font-bold text-orange-50 outline-none transition placeholder:text-orange-100/28 focus:border-[#f0d3ac]/60 focus:bg-white/[0.1] focus:ring-4 focus:ring-[#f0d3ac]/10"
                   required
                 />
               </div>
@@ -176,7 +176,7 @@ export default function RegisterPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full rounded-2xl border border-white/10 bg-white/[0.07] px-5 py-4 text-sm font-bold text-orange-50 outline-none transition placeholder:text-orange-100/28 focus:border-red-300/50 focus:bg-white/[0.1] focus:ring-4 focus:ring-red-500/10"
+                    className="w-full rounded-2xl border border-white/10 bg-white/[0.07] px-5 py-4 text-sm font-bold text-orange-50 outline-none transition placeholder:text-orange-100/28 focus:border-[#f0d3ac]/60 focus:bg-white/[0.1] focus:ring-4 focus:ring-[#f0d3ac]/10"
                     required
                   />
                 </div>
@@ -189,7 +189,7 @@ export default function RegisterPage() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full rounded-2xl border border-white/10 bg-white/[0.07] px-5 py-4 text-sm font-bold text-orange-50 outline-none transition placeholder:text-orange-100/28 focus:border-red-300/50 focus:bg-white/[0.1] focus:ring-4 focus:ring-red-500/10"
+                    className="w-full rounded-2xl border border-white/10 bg-white/[0.07] px-5 py-4 text-sm font-bold text-orange-50 outline-none transition placeholder:text-orange-100/28 focus:border-[#f0d3ac]/60 focus:bg-white/[0.1] focus:ring-4 focus:ring-[#f0d3ac]/10"
                     required
                   />
                 </div>
@@ -197,7 +197,7 @@ export default function RegisterPage() {
 
               <button
                 type="submit"
-                className="w-full rounded-full bg-[#f43f2f] px-7 py-4 text-sm font-black text-white shadow-[0_22px_70px_rgba(244,63,47,.34)] transition hover:-translate-y-0.5 hover:bg-[#ff523f]"
+                className="w-full rounded-full bg-[#f0d3ac] px-7 py-4 text-sm font-black text-[#160b09] shadow-[0_22px_70px_rgba(240,211,172,.32)] transition hover:-translate-y-0.5 hover:bg-[#f8e4c6]"
               >
                 Create account
               </button>
@@ -207,7 +207,7 @@ export default function RegisterPage() {
               Already have access?{" "}
               <Link
                 href="/login"
-                className="font-black text-red-200 transition hover:text-white"
+                className="font-black text-[#f0d3ac] transition hover:text-white"
               >
                 Sign in
               </Link>
@@ -257,7 +257,7 @@ export default function RegisterPage() {
                   whileHover={{ x: 8 }}
                   className="flex items-center gap-4 rounded-2xl border border-white/12 bg-white/[0.08] p-4 backdrop-blur"
                 >
-                  <span className="grid h-10 w-10 place-items-center rounded-full bg-red-500 text-sm font-black">
+                  <span className="grid h-10 w-10 place-items-center rounded-full bg-[#f0d3ac] text-sm font-black text-[#180d09]">
                     0{index + 1}
                   </span>
                   <span className="text-sm font-black text-orange-50/78">

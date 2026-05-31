@@ -2,14 +2,16 @@ import { useState, useEffect, useCallback } from 'react';
 import { InventoryBook, RoomState, PendingRequest, AddBookPayload, TimeSlot } from '../types';
 import { isAdminSession } from '@/lib/api';
 import { adminInventoryService } from '../services/api';
+import { adminDashboardApi } from '@/lib/admin-dashboard-api';
+import type { DashboardStatsResponseDto } from '@/lib/api-types';
 
 export const useAdminInventory = () => {
   const [inventory, setInventory] = useState<InventoryBook[]>([]);
   const [requests, setRequests] = useState<PendingRequest[]>([]);
   const [rooms, setRooms] = useState<RoomState[]>([]);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
   const [selectedTimeSlotId, setSelectedTimeSlotId] = useState('');
+  const [stats, setStats] = useState<DashboardStatsResponseDto | null>(null);
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,10 +27,11 @@ export const useAdminInventory = () => {
     }
 
     try {
-      const [invData, reqData, slotsData] = await Promise.all([
+      const [invData, reqData, slotsData, statsData] = await Promise.all([
         adminInventoryService.getInventory(),
         adminInventoryService.getRequests(),
-        adminInventoryService.getTimeSlots()
+        adminInventoryService.getTimeSlots(),
+        adminDashboardApi.getStats().catch(() => null)
       ]);
 
       const activeTimeSlotId = selectedTimeSlotId || slotsData[0]?.id || '';
@@ -36,11 +39,12 @@ export const useAdminInventory = () => {
       setInventory(invData);
       setRequests(reqData);
       setTimeSlots(slotsData);
+      setStats(statsData);
       setSelectedTimeSlotId(activeTimeSlotId);
 
       try {
         const roomData = activeTimeSlotId
-          ? await adminInventoryService.getRooms(selectedDate, activeTimeSlotId)
+          ? await adminInventoryService.getRooms(activeTimeSlotId)
           : await adminInventoryService.getRooms();
         setRooms(roomData);
       } catch (roomError: any) {
@@ -54,7 +58,7 @@ export const useAdminInventory = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [selectedDate, selectedTimeSlotId]);
+  }, [selectedTimeSlotId]);
 
   useEffect(() => {
     fetchDashboardData();
@@ -120,10 +124,9 @@ export const useAdminInventory = () => {
     requests,
     rooms,
     timeSlots,
-    selectedDate,
     selectedTimeSlotId,
-    setSelectedDate,
     setSelectedTimeSlotId,
+    stats,
     isLoading,
     error,
     handleApproveRequest,

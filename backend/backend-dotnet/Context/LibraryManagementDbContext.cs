@@ -15,6 +15,11 @@ public class LibraryManagementDbContext(DbContextOptions<LibraryManagementDbCont
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<OverdueFine> OverdueFines => Set<OverdueFine>();
     public DbSet<BookHold> BookHolds => Set<BookHold>();
+    public DbSet<BookReview> BookReviews => Set<BookReview>();
+    public DbSet<ReadingList> ReadingLists => Set<ReadingList>();
+    public DbSet<ReadingListItem> ReadingListItems => Set<ReadingListItem>();
+    public DbSet<UserBadge> UserBadges => Set<UserBadge>();
+    public DbSet<UserPoints> UserPoints => Set<UserPoints>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -101,5 +106,23 @@ public class LibraryManagementDbContext(DbContextOptions<LibraryManagementDbCont
         modelBuilder.Entity<TimeSlot>()
             .Property(x => x.EndTime)
             .HasColumnType("time");
+
+        modelBuilder.Entity<BookReview>()
+            .HasIndex(x => new { x.UserId, x.BookId })
+            .IsUnique();
+
+        modelBuilder.Entity<ReadingList>()
+            .Property(x => x.ListType)
+            .HasConversion<string>()
+            .HasColumnType("varchar(20)");
+
+        modelBuilder.Entity<ReadingListItem>()
+            .HasIndex(x => new { x.ReadingListId, x.BookId })
+            .IsUnique();
+
+        modelBuilder.Entity<UserBadge>()
+            .Property(x => x.BadgeType)
+            .HasConversion<string>()
+            .HasColumnType("varchar(30)");
     }
 }

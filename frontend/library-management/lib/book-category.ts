@@ -32,7 +32,7 @@ export const BOOK_CATEGORY_FILTER_OPTIONS: Array<{
   value: BookCategoryFilter;
   label: string;
 }> = [
-  { value: 'ALL', label: 'All Books' },
+  { value: 'ALL', label: 'All Categories' },
   ...BOOK_CATEGORY_OPTIONS,
 ];
 

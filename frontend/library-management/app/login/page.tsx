@@ -49,7 +49,7 @@ export default function LoginPage() {
     damping: 24,
     mass: 0.4,
   });
-  const glow = useMotionTemplate`radial-gradient(520px circle at ${smoothX}px ${smoothY}px, rgba(248, 113, 113, 0.22), transparent 44%)`;
+  const glow = useMotionTemplate`radial-gradient(520px circle at ${smoothX}px ${smoothY}px, rgba(240, 211, 172, 0.24), transparent 44%)`;
 
   const redirectAfterLogin = (role?: string | null) => {
     window.setTimeout(() => {
@@ -100,7 +100,7 @@ export default function LoginPage() {
         className="pointer-events-none fixed inset-0 z-0"
         style={{ background: glow }}
       />
-      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_left,rgba(220,38,38,0.4),transparent_34%),radial-gradient(circle_at_82%_18%,rgba(251,146,60,0.18),transparent_28%),linear-gradient(180deg,#080605_0%,#160b09_54%,#080605_100%)]" />
+      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_left,rgba(240,211,172,0.34),transparent_34%),radial-gradient(circle_at_82%_18%,rgba(240,211,172,0.18),transparent_28%),linear-gradient(180deg,#080605_0%,#15100b_54%,#080605_100%)]" />
       <div className="pointer-events-none absolute inset-0 z-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.8)_1px,transparent_1px)] [background-size:72px_72px]" />
 
       <motion.div
@@ -123,7 +123,7 @@ export default function LoginPage() {
             className="absolute left-8 top-8 flex items-center gap-3"
           >
             <span className="grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-white/10 backdrop-blur">
-              <span className="h-4 w-4 rounded-full bg-red-500 shadow-[0_0_24px_rgba(239,68,68,.9)]" />
+              <span className="h-4 w-4 rounded-full bg-[#f0d3ac] shadow-[0_0_24px_rgba(240,211,172,.72)]" />
             </span>
             <span>
               <span className="block text-lg font-black">OpenBook</span>
@@ -176,12 +176,12 @@ export default function LoginPage() {
           <div className="w-full max-w-md">
             <Link href="/" className="mb-10 flex items-center gap-3 lg:hidden">
               <span className="grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-white/10">
-                <span className="h-3.5 w-3.5 rounded-full bg-red-500" />
+                <span className="h-3.5 w-3.5 rounded-full bg-[#f0d3ac]" />
               </span>
               <span className="text-lg font-black">OpenBook</span>
             </Link>
 
-            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-red-300/75">
+            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-[#f0d3ac]/75">
               Member access
             </p>
             <h2 className="mt-4 text-4xl font-black tracking-[-0.05em] sm:text-5xl">
@@ -193,7 +193,7 @@ export default function LoginPage() {
             </p>
 
             {errorMsg && (
-              <div className="mt-6 rounded-2xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm font-bold text-red-100">
+              <div className="mt-6 rounded-2xl border border-[#f0d3ac]/30 bg-[#f0d3ac]/10 px-4 py-3 text-sm font-bold text-[#f8e4c6]">
                 {errorMsg}
               </div>
             )}
@@ -208,7 +208,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="curator@openbook.archive"
-                  className="w-full rounded-2xl border border-white/10 bg-white/[0.07] px-5 py-4 text-sm font-bold text-orange-50 outline-none transition placeholder:text-orange-100/28 focus:border-red-300/50 focus:bg-white/[0.1] focus:ring-4 focus:ring-red-500/10"
+                  className="w-full rounded-2xl border border-white/10 bg-white/[0.07] px-5 py-4 text-sm font-bold text-orange-50 outline-none transition placeholder:text-orange-100/28 focus:border-[#f0d3ac]/60 focus:bg-white/[0.1] focus:ring-4 focus:ring-[#f0d3ac]/10"
                   required
                 />
               </div>
@@ -220,7 +220,7 @@ export default function LoginPage() {
                   </label>
                   <Link
                     href="#"
-                    className="text-xs font-black text-red-200/80 transition hover:text-white"
+                    className="text-xs font-black text-[#f0d3ac]/80 transition hover:text-white"
                   >
                     Forgot?
                   </Link>
@@ -230,7 +230,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full rounded-2xl border border-white/10 bg-white/[0.07] px-5 py-4 text-sm font-bold text-orange-50 outline-none transition placeholder:text-orange-100/28 focus:border-red-300/50 focus:bg-white/[0.1] focus:ring-4 focus:ring-red-500/10"
+                  className="w-full rounded-2xl border border-white/10 bg-white/[0.07] px-5 py-4 text-sm font-bold text-orange-50 outline-none transition placeholder:text-orange-100/28 focus:border-[#f0d3ac]/60 focus:bg-white/[0.1] focus:ring-4 focus:ring-[#f0d3ac]/10"
                   required
                 />
               </div>
@@ -238,14 +238,14 @@ export default function LoginPage() {
               <label className="flex items-center gap-3 text-sm font-semibold text-orange-100/58">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 rounded border-white/20 bg-white/10 text-red-500 focus:ring-red-500"
+                  className="h-4 w-4 rounded border-white/20 bg-white/10 text-[#f0d3ac] focus:ring-[#f0d3ac]"
                 />
                 Keep me signed in for 30 days
               </label>
 
               <button
                 type="submit"
-                className="w-full rounded-full bg-[#f43f2f] px-7 py-4 text-sm font-black text-white shadow-[0_22px_70px_rgba(244,63,47,.34)] transition hover:-translate-y-0.5 hover:bg-[#ff523f]"
+                className="w-full rounded-full bg-[#f0d3ac] px-7 py-4 text-sm font-black text-[#160b09] shadow-[0_22px_70px_rgba(240,211,172,.32)] transition hover:-translate-y-0.5 hover:bg-[#f8e4c6]"
               >
                 Sign in
               </button>

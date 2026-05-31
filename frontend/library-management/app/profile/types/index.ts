@@ -22,6 +22,16 @@ export interface AuthProfileResponse {
 
 export interface UpdateProfileResponse extends AuthProfileResponse {}
 
+export interface ChangePasswordInput {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export interface ChangePasswordResponse {
+  message?: string;
+}
+
 export interface BorrowedBook {
   id: string;
   title: string;

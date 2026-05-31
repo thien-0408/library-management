@@ -11,4 +11,5 @@ public class DashboardStatsResponseDto
     public int UnpaidFines { get; set; }
     public decimal UnpaidFineAmount { get; set; }
     public int RoomReservationsToday { get; set; }
+    public int TotalBookReviews { get; set; }
 }

@@ -113,6 +113,35 @@ namespace backend_dotnet.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "book_reviews",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_book_reviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_book_reviews_books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_book_reviews_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "borrowBookRequest",
                 columns: table => new
                 {
@@ -166,6 +195,29 @@ namespace backend_dotnet.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "reading_lists",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ListType = table.Column<string>(type: "varchar(20)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_reading_lists", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_reading_lists_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "room_reservations",
                 columns: table => new
                 {
@@ -200,6 +252,54 @@ namespace backend_dotnet.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "user_badges",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BadgeType = table.Column<string>(type: "varchar(30)", nullable: false),
+                    BadgeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PointsAwarded = table.Column<int>(type: "int", nullable: false),
+                    EarnedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_user_badges", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_user_badges_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "user_points",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TotalPoints = table.Column<int>(type: "int", nullable: false),
+                    BooksRead = table.Column<int>(type: "int", nullable: false),
+                    ReviewsWritten = table.Column<int>(type: "int", nullable: false),
+                    CurrentStreak = table.Column<int>(type: "int", nullable: false),
+                    LongestStreak = table.Column<int>(type: "int", nullable: false),
+                    LastActivityDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_user_points", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_user_points_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "overdue_fines",
                 columns: table => new
                 {
@@ -229,6 +329,33 @@ namespace backend_dotnet.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "reading_list_items",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReadingListId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AddedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_reading_list_items", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_reading_list_items_books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_reading_list_items_reading_lists_ReadingListId",
+                        column: x => x.ReadingListId,
+                        principalTable: "reading_lists",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_book_holds_BookId",
                 table: "book_holds",
@@ -238,6 +365,17 @@ namespace backend_dotnet.Migrations
                 name: "IX_book_holds_UserId_BookId_Status",
                 table: "book_holds",
                 columns: new[] { "UserId", "BookId", "Status" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_book_reviews_BookId",
+                table: "book_reviews",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_book_reviews_UserId_BookId",
+                table: "book_reviews",
+                columns: new[] { "UserId", "BookId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_borrowBookRequest_book_id",
@@ -272,6 +410,22 @@ namespace backend_dotnet.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_reading_list_items_BookId",
+                table: "reading_list_items",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_reading_list_items_ReadingListId_BookId",
+                table: "reading_list_items",
+                columns: new[] { "ReadingListId", "BookId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_reading_lists_UserId",
+                table: "reading_lists",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_room_reservations_AccessCode",
                 table: "room_reservations",
                 column: "AccessCode",
@@ -302,6 +456,17 @@ namespace backend_dotnet.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_user_badges_UserId",
+                table: "user_badges",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_points_UserId",
+                table: "user_points",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_users_Email",
                 table: "users",
                 column: "Email",
@@ -316,16 +481,31 @@ namespace backend_dotnet.Migrations
                 name: "book_holds");
 
             migrationBuilder.DropTable(
+                name: "book_reviews");
+
+            migrationBuilder.DropTable(
                 name: "notifications");
 
             migrationBuilder.DropTable(
                 name: "overdue_fines");
 
             migrationBuilder.DropTable(
+                name: "reading_list_items");
+
+            migrationBuilder.DropTable(
                 name: "room_reservations");
 
             migrationBuilder.DropTable(
+                name: "user_badges");
+
+            migrationBuilder.DropTable(
+                name: "user_points");
+
+            migrationBuilder.DropTable(
                 name: "borrowBookRequest");
+
+            migrationBuilder.DropTable(
+                name: "reading_lists");
 
             migrationBuilder.DropTable(
                 name: "rooms");

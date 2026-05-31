@@ -9,6 +9,7 @@ namespace backend_dotnet.Services;
 public class RoomReservationService(
     LibraryManagementDbContext dbContext,
     INotificationService notificationService,
+    IGamificationService gamificationService,
     ILogger<RoomReservationService> logger) : IRoomReservationService
 {
     private static readonly char[] CodeCharacters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789".ToCharArray();
@@ -33,21 +34,17 @@ public class RoomReservationService(
             throw new KeyNotFoundException("Time slot not found.");
         }
 
-        ValidateBookingDate(request.BookingDate, timeSlot.StartTime);
-
         var hasDuplicate = await dbContext.RoomReservations.AnyAsync(x =>
             x.UserId == user.Id &&
-            x.TimeSlotId == timeSlot.Id &&
-            x.BookingDate == request.BookingDate);
+            x.TimeSlotId == timeSlot.Id);
         if (hasDuplicate)
         {
-            throw new InvalidOperationException("User already booked this time slot on this date.");
+            throw new InvalidOperationException("User already booked this time slot.");
         }
 
         var currentBooked = await dbContext.RoomReservations.CountAsync(x =>
             x.RoomId == room.Id &&
             x.TimeSlotId == timeSlot.Id &&
-            x.BookingDate == request.BookingDate &&
             x.ReservationStatus == ReservationStatus.SCHEDULING);
         if (currentBooked >= room.Capacity)
         {
@@ -72,9 +69,11 @@ public class RoomReservationService(
 
         await notificationService.CreateAsync(
             user.Id,
-            "Room access code",
-            $"Your access code for room {room.Name} on {request.BookingDate} from {timeSlot.StartTime} to {timeSlot.EndTime} is {reservation.AccessCode}.",
+            "Room code",
+            $"Room code: {reservation.AccessCode}",
             NotificationType.ROOM_ACCESS_CODE);
+
+        await gamificationService.RecordRoomReservationAsync(user.Id);
 
         logger.LogInformation("Created room reservation {ReservationId}.", reservation.Id);
         return MapToResponse(reservation);
@@ -102,23 +101,19 @@ public class RoomReservationService(
             throw new KeyNotFoundException("Time slot not found.");
         }
 
-        ValidateBookingDate(request.BookingDate, timeSlot.StartTime);
-
         var hasDuplicate = await dbContext.RoomReservations.AnyAsync(x =>
             x.Id != id &&
             x.UserId == reservation.UserId &&
-            x.TimeSlotId == timeSlot.Id &&
-            x.BookingDate == request.BookingDate);
+            x.TimeSlotId == timeSlot.Id);
         if (hasDuplicate)
         {
-            throw new InvalidOperationException("User already booked this time slot on this date.");
+            throw new InvalidOperationException("User already booked this time slot.");
         }
 
         var currentBooked = await dbContext.RoomReservations.CountAsync(x =>
             x.Id != id &&
             x.RoomId == room.Id &&
             x.TimeSlotId == timeSlot.Id &&
-            x.BookingDate == request.BookingDate &&
             (x.ReservationStatus == ReservationStatus.SCHEDULING || x.ReservationStatus == ReservationStatus.CONFIRMED));
         if (currentBooked >= room.Capacity)
         {
@@ -173,16 +168,12 @@ public class RoomReservationService(
 
     public async Task<UpcomingReservationResponseDto?> GetUpcomingAsync(Guid userId)
     {
-        var today = DateOnly.FromDateTime(DateTime.Now);
-
         var reservation = await dbContext.RoomReservations
             .Include(x => x.Room)
             .Include(x => x.TimeSlot)
             .Where(x => x.UserId == userId &&
-                        x.ReservationStatus == ReservationStatus.SCHEDULING &&
-                        x.BookingDate >= today)
-            .OrderBy(x => x.BookingDate)
-            .ThenBy(x => x.TimeSlot!.StartTime)
+                        x.ReservationStatus == ReservationStatus.SCHEDULING)
+            .OrderBy(x => x.TimeSlot!.StartTime)
             .FirstOrDefaultAsync();
 
         if (reservation is null || reservation.TimeSlot is null)
@@ -238,13 +229,11 @@ public class RoomReservationService(
             throw new KeyNotFoundException("Time slot not found.");
         }
 
-        var today = DateOnly.FromDateTime(DateTime.Now);
         var now = TimeOnly.FromDateTime(DateTime.Now);
         var startTime = reservation.TimeSlot.StartTime;
         var endConfirmTime = startTime.AddMinutes(10);
 
         if (reservation.ReservationStatus != ReservationStatus.SCHEDULING ||
-            reservation.BookingDate != today ||
             now < startTime ||
             now > endConfirmTime)
         {
@@ -275,12 +264,10 @@ public class RoomReservationService(
             throw new KeyNotFoundException("Time slot not found.");
         }
 
-        var today = DateOnly.FromDateTime(DateTime.Now);
         var now = TimeOnly.FromDateTime(DateTime.Now);
         var startTime = reservation.TimeSlot.StartTime;
 
-        if (reservation.BookingDate < today ||
-            (reservation.BookingDate == today && now >= startTime))
+        if (now >= startTime)
         {
             throw new InvalidOperationException("Reservation cannot be cancelled after the start time.");
         }
@@ -297,22 +284,6 @@ public class RoomReservationService(
         if (!isAdmin && reservation.UserId != currentUserId)
         {
             throw new UnauthorizedAccessException("You are not allowed to modify this reservation.");
-        }
-    }
-
-    private static void ValidateBookingDate(DateOnly bookingDate, TimeOnly startTime)
-    {
-        var today = DateOnly.FromDateTime(DateTime.Now);
-        var now = TimeOnly.FromDateTime(DateTime.Now);
-
-        if (bookingDate < today)
-        {
-            throw new InvalidOperationException("Booking date cannot be in the past.");
-        }
-
-        if (bookingDate == today && startTime <= now)
-        {
-            throw new InvalidOperationException("Booking time is no longer valid for today.");
         }
     }
 

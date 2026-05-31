@@ -56,7 +56,7 @@ export default function FinesPage() {
   };
 
   return (
-    <div className="bg-surface font-body text-on-surface min-h-screen">
+    <div className="bg-[#f4f0e8] font-body text-on-surface min-h-screen">
       <Header />
       <main className="app-shell-main app-shell-content page-shell px-6 md:px-8 xl:px-10 max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-10">

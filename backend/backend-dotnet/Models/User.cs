@@ -35,4 +35,12 @@ public class User
     public ICollection<BookHold> BookHolds { get; set; } = new List<BookHold>();
 
     public ICollection<OverdueFine> OverdueFines { get; set; } = new List<OverdueFine>();
+
+    public ICollection<BookReview> BookReviews { get; set; } = new List<BookReview>();
+
+    public ICollection<ReadingList> ReadingLists { get; set; } = new List<ReadingList>();
+
+    public ICollection<UserBadge> Badges { get; set; } = new List<UserBadge>();
+
+    public UserPoints? Points { get; set; }
 }

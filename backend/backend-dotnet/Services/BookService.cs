@@ -14,7 +14,9 @@ public class BookService(
 {
     public async Task<BookResponseDto> GetByIdAsync(Guid id)
     {
-        var book = await dbContext.Books.FirstOrDefaultAsync(x => x.Id == id);
+        var book = await dbContext.Books
+            .Include(x => x.Reviews)
+            .FirstOrDefaultAsync(x => x.Id == id);
         if (book is null)
         {
             throw new KeyNotFoundException("Book not found.");
@@ -59,6 +61,7 @@ public class BookService(
         var pageSize = Math.Clamp(query.PageSize, 1, 100);
         var totalItems = await books.CountAsync();
         var results = await books
+            .Include(x => x.Reviews)
             .OrderBy(x => x.Title)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
@@ -199,6 +202,7 @@ public class BookService(
 
     private static BookResponseDto MapToResponse(Book book)
     {
+        var reviews = book.Reviews ?? new List<BookReview>();
         return new BookResponseDto
         {
             Id = book.Id,
@@ -212,7 +216,9 @@ public class BookService(
             BookOnlineUrl = book.BookOnlineUrl,
             DocumentFileUrl = book.DocumentFileUrl,
             Status = book.Status,
-            DocumentType = book.DocumentType
+            DocumentType = book.DocumentType,
+            AverageRating = reviews.Count > 0 ? Math.Round(reviews.Average(x => x.Rating), 1) : null,
+            TotalReviews = reviews.Count
         };
     }
 

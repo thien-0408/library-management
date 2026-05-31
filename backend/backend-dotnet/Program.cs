@@ -59,6 +59,9 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IBookHoldService, BookHoldService>();
 builder.Services.AddScoped<IFineService, FineService>();
 builder.Services.AddScoped<IAdminDashboardService, AdminDashboardService>();
+builder.Services.AddScoped<IBookReviewService, BookReviewService>();
+builder.Services.AddScoped<IReadingListService, ReadingListService>();
+builder.Services.AddScoped<IGamificationService, GamificationService>();
 builder.Services.AddHostedService<ExpiredTimeSlotCleanupService>();
 builder.Services.AddCors(options =>
 {

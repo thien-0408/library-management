@@ -1,6 +1,6 @@
 import { apiFetch, resolveAssetUrl } from '@/lib/api';
 import { roomBookingApi } from '@/lib/room-booking-api';
-import { UserProfile, BorrowedBook, RoomReservation, PendingRequest, UpdateProfileInput, UpdateProfileResponse, AuthProfileResponse } from '../types';
+import { UserProfile, BorrowedBook, RoomReservation, PendingRequest, UpdateProfileInput, UpdateProfileResponse, AuthProfileResponse, ChangePasswordInput, ChangePasswordResponse } from '../types';
 
 const getCollection = <T>(data: any): T[] => {
   if (Array.isArray(data)) return data;
@@ -45,6 +45,17 @@ export const profileService = {
     }
 
     return response;
+  },
+
+  changePassword: async ({ currentPassword, newPassword, confirmPassword }: ChangePasswordInput) => {
+    return apiFetch<ChangePasswordResponse>('/api/auth/change-password', {
+      method: 'POST',
+      body: {
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      },
+    });
   },
 
   getProfileData: async () => {

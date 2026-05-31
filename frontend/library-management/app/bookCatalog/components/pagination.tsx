@@ -16,10 +16,11 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         <button
           key={i}
           onClick={() => onPageChange(i)}
-          className={`flex h-10 w-10 items-center justify-center rounded-full font-black transition-all ${currentPage === i
-            ? 'bg-red-600 text-white shadow-lg shadow-red-100'
-            : 'text-slate-500 hover:bg-red-50 hover:text-red-700'
-            }`}
+          className={`flex h-10 w-10 items-center justify-center rounded-full font-black transition-all ${
+            currentPage === i
+              ? 'catalog-accent-button shadow-none'
+              : 'text-[var(--catalog-text-muted)] hover:bg-white hover:text-[var(--catalog-text)]'
+          }`}
         >
           {i}
         </button>
@@ -29,16 +30,19 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   };
 
   return (
-    <footer className="mt-16 flex flex-col items-center justify-between gap-6 border-t border-red-100 pt-8 md:flex-row">
-      <p className="text-sm font-black text-slate-500">
+    <footer className="mt-16 flex flex-col items-center justify-between gap-6 border-t border-[var(--catalog-border)] pt-8 md:flex-row">
+      <p className="text-sm font-black text-[var(--catalog-text-muted)]">
         Showing page {currentPage} of {totalPages}
       </p>
-      <div className="flex items-center gap-2 rounded-full border border-red-100 bg-white p-2 shadow-sm">
+      <div className="catalog-panel flex items-center gap-2 rounded-full p-2 shadow-none">
         <button
           onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
           disabled={currentPage === 1}
-          className={`flex h-10 w-10 items-center justify-center rounded-full border border-red-100 transition-all ${currentPage === 1 ? 'cursor-not-allowed opacity-50' : 'hover:border-red-300 hover:bg-red-50 hover:text-red-700'
-            }`}
+          className={`flex h-10 w-10 items-center justify-center rounded-full border border-[var(--catalog-border)] transition-all ${
+            currentPage === 1
+              ? 'cursor-not-allowed opacity-50'
+              : 'hover:border-[var(--catalog-border-strong)] hover:bg-white hover:text-[var(--catalog-text)]'
+          }`}
         >
           <i className="fa-solid fa-chevron-left text-sm"></i>
         </button>
@@ -48,8 +52,11 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         <button
           onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
           disabled={currentPage === totalPages}
-          className={`flex h-10 w-10 items-center justify-center rounded-full border border-red-100 transition-all ${currentPage === totalPages ? 'cursor-not-allowed opacity-50' : 'hover:border-red-300 hover:bg-red-50 hover:text-red-700'
-            }`}
+          className={`flex h-10 w-10 items-center justify-center rounded-full border border-[var(--catalog-border)] transition-all ${
+            currentPage === totalPages
+              ? 'cursor-not-allowed opacity-50'
+              : 'hover:border-[var(--catalog-border-strong)] hover:bg-white hover:text-[var(--catalog-text)]'
+          }`}
         >
           <i className="fa-solid fa-chevron-right text-sm"></i>
         </button>

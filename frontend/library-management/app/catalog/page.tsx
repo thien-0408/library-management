@@ -12,6 +12,7 @@ import Pagination from "@/app/bookCatalog/components/pagination";
 import { useBookCatalog } from "@/app/bookCatalog/hooks/useBookCatalog";
 import type { BorrowMode } from "@/app/bookCatalog/services/api";
 import { CardGridSkeleton } from "@/components/skeleton_loader";
+import { BOOK_CATEGORY_FILTER_OPTIONS } from "@/lib/book-category";
 
 export default function CatalogPage() {
   const [selectedBook, setSelectedBook] = useState<IBook | null>(null);
@@ -39,6 +40,7 @@ export default function CatalogPage() {
     handleRequestBook: requestBookApi,
     handlePlaceHold: placeHoldApi,
   } = useBookCatalog();
+
 
   const handleOpenDetail = (book: IBook) => {
     setSelectedBook(book);
@@ -83,91 +85,126 @@ export default function CatalogPage() {
     }
   };
 
+  const highlightedBooks = books.slice(0, 4);
+  const featuredCategories = BOOK_CATEGORY_FILTER_OPTIONS.slice(1, 5);
+  const categoryFallbackImages: Record<string, string> = {
+    GENERAL: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=900&q=80",
+    FICTION: "https://images.unsplash.com/photo-1495640388908-05fa85288e61?auto=format&fit=crop&w=900&q=80",
+    NON_FICTION: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=900&q=80",
+    SCIENCE: "https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=900&q=80",
+  };
+
+  const defaultCategoryImage = "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=900&q=80";
+
   return (
-    <div className="min-h-screen bg-[#fff7f7] font-body text-slate-950">
+    <div className="relative min-h-screen bg-white font-body text-[#1d1d1d] z-0">
+      <div className="absolute top-0 left-0 right-0 h-[45vh] bg-[#e3dcd1] rounded-br-[6rem] md:rounded-br-[10rem] -z-10 pointer-events-none" />
+
       <Header />
 
-      <main className="app-shell-main app-shell-content page-shell mx-auto w-full max-w-7xl flex-grow px-5 pb-16 md:px-8">
-        {/*<header data-aos="fade-in" data-aos-duration="300" className="relative mb-8 overflow-hidden rounded-[2.25rem] border border-red-100 bg-white px-6 py-8 shadow-[0_24px_80px_-48px_rgba(153,27,27,0.45)] sm:px-8 lg:px-10 lg:py-10">
-                    <div className="absolute right-[-5rem] top-[-6rem] h-72 w-72 rounded-full bg-red-200/55 blur-3xl" />
-                    <div className="absolute bottom-[-7rem] left-1/2 h-64 w-64 rounded-full bg-rose-100 blur-3xl" />
-                    <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-                        <div>
-                            <div className="inline-flex items-center gap-2 rounded-full border border-red-100 bg-red-50 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-red-700">
-                                <span className="h-2 w-2 rounded-full bg-red-600" />
-                                Curated collection
-                            </div>
-                            <h1 className="mt-5 max-w-3xl font-headline text-5xl font-black leading-[0.95] tracking-[-0.055em] text-slate-950 sm:text-6xl">
-                                Explore books, documents, and research spaces with clarity.
-                            </h1>
-                            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
-                                Search the OpenBook archive, request physical copies, read online documents, and place holds from one focused red-and-white workspace.
-                            </p>
-                        </div>
-                        <div className="grid grid-cols-3 gap-3 rounded-[1.75rem] border border-red-100 bg-red-50/70 p-3 text-center">
-                            <div className="rounded-2xl bg-white px-4 py-4 shadow-sm">
-                                <p className="text-2xl font-black text-red-700">1.24M</p>
-                                <p className="mt-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Volumes</p>
-                            </div>
-                            <div className="rounded-2xl bg-white px-4 py-4 shadow-sm">
-                                <p className="text-2xl font-black text-red-700">24/7</p>
-                                <p className="mt-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Access</p>
-                            </div>
-                            <div className="rounded-2xl bg-white px-4 py-4 shadow-sm">
-                                <p className="text-2xl font-black text-red-700">98%</p>
-                                <p className="mt-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">Fulfilled</p>
-                            </div>
-                        </div>
-                    </div>
-                </header>*/}
+      <main className="app-shell-main app-shell-content mx-auto w-full max-w-[96rem] px-4 pb-12 pt-24 sm:px-6 md:px-8 lg:pt-10 xl:px-10">
+        <div className="grid gap-12">
+          <div className="space-y-12">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between xl:block">
+              <div>
+                <h1 className="font-headline text-[3rem] font-black leading-none tracking-[-0.04em] text-black">
+                  Discover
+                </h1>
+              </div>
+            </div>
 
-        <CatalogFilter
-          activeTab={activeTab}
-          onTabChange={handleTabChange}
-          sortBy={sortBy}
-          onSortChange={handleSortChange}
-          searchTerm={searchTerm}
-          searchField={searchField}
-          documentType={documentType}
-          onSearchChange={handleSearchChange}
-          onSearchFieldChange={handleSearchFieldChange}
-          onDocumentTypeChange={handleDocumentTypeChange}
-          onClearSearch={clearSearch}
-        />
+            <div className="max-w-3xl">
+              <CatalogFilter
+                activeTab={activeTab}
+                onTabChange={handleTabChange}
+                sortBy={sortBy}
+                onSortChange={handleSortChange}
+                searchTerm={searchTerm}
+                searchField={searchField}
+                documentType={documentType}
+                onSearchChange={handleSearchChange}
+                onSearchFieldChange={handleSearchFieldChange}
+                onDocumentTypeChange={handleDocumentTypeChange}
+                onClearSearch={clearSearch}
+              />
+            </div>
 
-        {error && (
-          <div className="mb-8 rounded-[1.5rem] border border-red-100 bg-white px-6 py-8 text-center font-bold text-red-700 shadow-sm">
-            <i className="fa-solid fa-triangle-exclamation mr-2"></i>
-            {error}
-          </div>
-        )}
 
-        {isLoading ? (
-          <CardGridSkeleton count={10} />
-        ) : (
-          <section
-            key={`${activeTab}-${sortBy}-${currentPage}`}
-            className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5"
-          >
-            {books.length > 0 ? (
-              books.map((book, index) => (
-                <div
-                  data-aos="fade-up"
-                  data-aos-delay={index * 100}
-                  key={book.id}
+
+            <section className="mt-8">
+              <div className="mb-10 flex items-center justify-between gap-4">
+                <h2 className="text-[1.75rem] font-medium text-[#3f3a33]">
+                  Book Category
+                </h2>
+                <button
+                  type="button"
+                  className="grid h-10 w-10 place-items-center rounded-xl border border-[#dfd8ca] bg-transparent text-[#3f3a33] transition-colors hover:bg-white"
                 >
-                  <BookCard
-                    book={book}
-                    onOpenDetail={handleOpenDetail}
-                    onRequestBook={onBookRequest}
-                    onPlaceHold={onPlaceHold}
-                  />
+                  <i className="fa-solid fa-sliders"></i>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 xl:gap-8">
+                {featuredCategories.map((category, index) => {
+                  return (
+                    <button
+                      key={category.value}
+                      type="button"
+                      onClick={() => handleTabChange(category.value)}
+                      className="group relative flex flex-col items-center pt-16"
+                    >
+                      <div className="absolute top-0 z-10 w-[7.5rem] h-[10.5rem] rounded-lg shadow-[0_12px_30px_-10px_rgba(0,0,0,0.4)] transition-transform duration-300 group-hover:-translate-y-2 sm:w-32 sm:h-44">
+                        <img
+                          src={categoryFallbackImages[category.value] || defaultCategoryImage}
+                          alt={category.label}
+                          className="h-full w-full rounded-lg object-cover ring-1 ring-black/5"
+                        />
+                      </div>
+                      <div className="w-full pt-28 sm:pt-32 pb-5 rounded-[1.5rem] bg-[#f6f4f0] text-center transition-colors group-hover:bg-[#f0ebe1]">
+                        <p className="mt-4 text-[1.1rem] font-bold text-[#22201b]">
+                          {category.label}
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {!isLoading && !error && books.length > 0 && (
+              <section className="space-y-5 mt-8 border-t border-[#ece5d7] pt-12">
+                <h2 className="text-[1.75rem] font-medium text-[#3f3a33] mb-6">
+                  All Books
+                </h2>
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                  {books.map((book, index) => (
+                    <div
+                      data-aos="fade-up"
+                      data-aos-delay={index * 80}
+                      key={book.id}
+                    >
+                      <BookCard
+                        book={book}
+                        onOpenDetail={handleOpenDetail}
+                        onRequestBook={onBookRequest}
+                        onPlaceHold={onPlaceHold}
+                      />
+                    </div>
+                  ))}
                 </div>
-              ))
-            ) : (
-              <div className="col-span-1 rounded-[2rem] border border-red-100 bg-white py-20 text-center text-slate-500 shadow-sm sm:col-span-2 lg:col-span-4 xl:col-span-5">
-                <i className="fa-solid fa-magnifying-glass mb-4 text-4xl text-red-200"></i>
-                <h2 className="font-headline text-2xl font-black text-slate-950">
+
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </section>
+            )}
+
+            {!isLoading && !error && books.length === 0 && (
+              <div className="rounded-[1.8rem] border border-[#ece5d7] py-20 text-center text-[#8b8579] bg-white">
+                <i className="fa-solid fa-magnifying-glass mb-4 text-4xl text-[#c9c0b1]"></i>
+                <h2 className="font-headline text-2xl font-black text-[#1d1d1d]">
                   No matching items
                 </h2>
                 <p className="mt-2 font-medium">
@@ -175,16 +212,8 @@ export default function CatalogPage() {
                 </p>
               </div>
             )}
-          </section>
-        )}
-
-        {!isLoading && !error && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        )}
+          </div>
+        </div>
       </main>
 
       <BookDetailModal

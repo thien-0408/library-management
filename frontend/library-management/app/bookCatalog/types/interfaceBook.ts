@@ -16,4 +16,6 @@ export interface IBook {
   bookOnlineUrl?: string | null;
   documentFileUrl?: string | null;
   status: 'AVAILABLE' | 'NOT_AVAILABLE';
+  averageRating?: number;
+  totalReviews?: number;
 }

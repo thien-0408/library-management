@@ -30,7 +30,7 @@ const AddRoomModal: React.FC<AddRoomModalProps> = ({ isOpen, room, onClose, onSa
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/60 animate-in fade-in duration-200">
       <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-10 duration-300">
         <div className="px-8 py-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
           <h2 className="font-headline font-bold text-2xl">{isEditMode ? 'Edit Room' : 'Add New Room'}</h2>
@@ -59,7 +59,7 @@ const AddRoomModal: React.FC<AddRoomModalProps> = ({ isOpen, room, onClose, onSa
             <button type="button" onClick={onClose} className="flex-1 py-4 border-2 border-outline-variant text-on-surface-variant rounded-xl font-bold hover:bg-surface-variant transition-colors">
               Cancel
             </button>
-            <button type="submit" className="flex-1 py-4 vibrant-gradient-bg text-white rounded-xl font-bold hover:brightness-110 active:scale-[0.98] transition-all shadow-md">
+            <button type="submit" className="flex-1 py-4 bg-primary text-on-primary rounded-xl font-bold hover:bg-[#274c42] active:scale-[0.98] transition-all shadow-md">
               {isEditMode ? 'Save Changes' : 'Create Room'}
             </button>
           </div>

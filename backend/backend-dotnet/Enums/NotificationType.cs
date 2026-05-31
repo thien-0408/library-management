@@ -10,5 +10,6 @@ public enum NotificationType
     FINE,
     OFFLINE_BORROW_CODE,
     ONLINE_ACCESS,
-    ROOM_ACCESS_CODE
+    ROOM_ACCESS_CODE,
+    BADGE_EARNED
 }

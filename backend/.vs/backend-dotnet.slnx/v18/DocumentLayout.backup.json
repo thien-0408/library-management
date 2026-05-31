@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\nguye\\OneDrive\\M\u00E1y t\u00EDnh\\Thien-0408\\library-management\\library-management\\backend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{2D81C02B-BDB8-1407-530C-1B649AA24FE5}|backend-dotnet\\backend-dotnet.csproj|c:\\users\\nguye\\onedrive\\m\u00E1y t\u00EDnh\\thien-0408\\library-management\\library-management\\backend\\backend-dotnet\\controllers\\bookcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2D81C02B-BDB8-1407-530C-1B649AA24FE5}|backend-dotnet\\backend-dotnet.csproj|solutionrelative:backend-dotnet\\controllers\\bookcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{2D81C02B-BDB8-1407-530C-1B649AA24FE5}|backend-dotnet\\backend-dotnet.csproj|c:\\users\\nguye\\onedrive\\m\u00E1y t\u00EDnh\\thien-0408\\library-management\\library-management\\backend\\backend-dotnet\\enums\\documenttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2D81C02B-BDB8-1407-530C-1B649AA24FE5}|backend-dotnet\\backend-dotnet.csproj|solutionrelative:backend-dotnet\\enums\\documenttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -33,10 +37,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{2D81C02B-BDB8-1407-530C-1B649AA24FE5}|backend-dotnet\\backend-dotnet.csproj|c:\\users\\nguye\\onedrive\\m\u00E1y t\u00EDnh\\thien-0408\\library-management\\library-management\\backend\\backend-dotnet\\enums\\bookcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2D81C02B-BDB8-1407-530C-1B649AA24FE5}|backend-dotnet\\backend-dotnet.csproj|solutionrelative:backend-dotnet\\enums\\bookcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2D81C02B-BDB8-1407-530C-1B649AA24FE5}|backend-dotnet\\backend-dotnet.csproj|c:\\users\\nguye\\onedrive\\m\u00E1y t\u00EDnh\\thien-0408\\library-management\\library-management\\backend\\backend-dotnet\\controllers\\bookcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2D81C02B-BDB8-1407-530C-1B649AA24FE5}|backend-dotnet\\backend-dotnet.csproj|solutionrelative:backend-dotnet\\controllers\\bookcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2D81C02B-BDB8-1407-530C-1B649AA24FE5}|backend-dotnet\\backend-dotnet.csproj|c:\\users\\nguye\\onedrive\\m\u00E1y t\u00EDnh\\thien-0408\\library-management\\library-management\\backend\\backend-dotnet\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -106,7 +106,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -114,7 +114,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "AdminDashboardController.cs",
               "DocumentMoniker": "C:\\Users\\nguye\\OneDrive\\M\u00E1y t\u00EDnh\\Thien-0408\\library-management\\library-management\\backend\\backend-dotnet\\Controllers\\AdminDashboardController.cs",
               "RelativeDocumentMoniker": "backend-dotnet\\Controllers\\AdminDashboardController.cs",
@@ -122,12 +122,11 @@
               "RelativeToolTip": "backend-dotnet\\Controllers\\AdminDashboardController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAABJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-23T11:41:40.312Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-23T11:41:40.312Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "BorrowBookRequestsController.cs",
               "DocumentMoniker": "C:\\Users\\nguye\\OneDrive\\M\u00E1y t\u00EDnh\\Thien-0408\\library-management\\library-management\\backend\\backend-dotnet\\Controllers\\BorrowBookRequestsController.cs",
               "RelativeDocumentMoniker": "backend-dotnet\\Controllers\\BorrowBookRequestsController.cs",
@@ -135,8 +134,7 @@
               "RelativeToolTip": "backend-dotnet\\Controllers\\BorrowBookRequestsController.cs",
               "ViewState": "AgIAACQAAAAAAAAAAAAowBUAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-17T10:29:31.782Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-17T10:29:31.782Z"
             },
             {
               "$type": "Document",
@@ -164,15 +162,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 0,
               "Title": "BookController.cs",
               "DocumentMoniker": "C:\\Users\\nguye\\OneDrive\\M\u00E1y t\u00EDnh\\Thien-0408\\library-management\\library-management\\backend\\backend-dotnet\\Controllers\\BookController.cs",
               "RelativeDocumentMoniker": "backend-dotnet\\Controllers\\BookController.cs",
               "ToolTip": "C:\\Users\\nguye\\OneDrive\\M\u00E1y t\u00EDnh\\Thien-0408\\library-management\\library-management\\backend\\backend-dotnet\\Controllers\\BookController.cs",
               "RelativeToolTip": "backend-dotnet\\Controllers\\BookController.cs",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAgwEoAAAA6AAAAAAAAAA==",
+              "ViewState": "AgIAABkAAAAAAAAAAAAgwC8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-15T08:52:27.092Z"
+              "WhenOpened": "2026-05-15T08:52:27.092Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -200,7 +199,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "User.cs",
               "DocumentMoniker": "C:\\Users\\nguye\\OneDrive\\M\u00E1y t\u00EDnh\\Thien-0408\\library-management\\library-management\\backend\\backend-dotnet\\Models\\User.cs",
               "RelativeDocumentMoniker": "backend-dotnet\\Models\\User.cs",
@@ -212,7 +211,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "DocumentType.cs",
               "DocumentMoniker": "C:\\Users\\nguye\\OneDrive\\M\u00E1y t\u00EDnh\\Thien-0408\\library-management\\library-management\\backend\\backend-dotnet\\Enums\\DocumentType.cs",
               "RelativeDocumentMoniker": "backend-dotnet\\Enums\\DocumentType.cs",
@@ -220,12 +219,11 @@
               "RelativeToolTip": "backend-dotnet\\Enums\\DocumentType.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-15T09:13:41.036Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-15T09:13:41.036Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "BorrowBookResponseDto.cs",
               "DocumentMoniker": "C:\\Users\\nguye\\OneDrive\\M\u00E1y t\u00EDnh\\Thien-0408\\library-management\\library-management\\backend\\backend-dotnet\\DTOs\\BorrowBooks\\BorrowBookResponseDto.cs",
               "RelativeDocumentMoniker": "backend-dotnet\\DTOs\\BorrowBooks\\BorrowBookResponseDto.cs",
@@ -237,7 +235,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\nguye\\OneDrive\\M\u00E1y t\u00EDnh\\Thien-0408\\library-management\\library-management\\backend\\backend-dotnet\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "backend-dotnet\\Controllers\\AuthController.cs",
@@ -249,7 +247,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "BookCategory.cs",
               "DocumentMoniker": "C:\\Users\\nguye\\OneDrive\\M\u00E1y t\u00EDnh\\Thien-0408\\library-management\\library-management\\backend\\backend-dotnet\\Enums\\BookCategory.cs",
               "RelativeDocumentMoniker": "backend-dotnet\\Enums\\BookCategory.cs",
@@ -261,7 +259,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "BookPendingStatus.cs",
               "DocumentMoniker": "C:\\Users\\nguye\\OneDrive\\M\u00E1y t\u00EDnh\\Thien-0408\\library-management\\library-management\\backend\\backend-dotnet\\Enums\\BookPendingStatus.cs",
               "RelativeDocumentMoniker": "backend-dotnet\\Enums\\BookPendingStatus.cs",

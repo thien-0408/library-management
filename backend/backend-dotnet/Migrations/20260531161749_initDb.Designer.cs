@@ -12,7 +12,7 @@ using backend_dotnet.Context;
 namespace backend_dotnet.Migrations
 {
     [DbContext(typeof(LibraryManagementDbContext))]
-    [Migration("20260524111517_initDb")]
+    [Migration("20260531161749_initDb")]
     partial class initDb
     {
         /// <inheritdoc />
@@ -102,6 +102,40 @@ namespace backend_dotnet.Migrations
                     b.HasIndex("UserId", "BookId", "Status");
 
                     b.ToTable("book_holds");
+                });
+
+            modelBuilder.Entity("backend_dotnet.Models.BookReview", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("UserId", "BookId")
+                        .IsUnique();
+
+                    b.ToTable("book_reviews");
                 });
 
             modelBuilder.Entity("backend_dotnet.Models.BorrowBookRequest", b =>
@@ -223,6 +257,67 @@ namespace backend_dotnet.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("overdue_fines");
+                });
+
+            modelBuilder.Entity("backend_dotnet.Models.ReadingList", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ListType")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("reading_lists");
+                });
+
+            modelBuilder.Entity("backend_dotnet.Models.ReadingListItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ReadingListId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("ReadingListId", "BookId")
+                        .IsUnique();
+
+                    b.ToTable("reading_list_items");
                 });
 
             modelBuilder.Entity("backend_dotnet.Models.Room", b =>
@@ -372,6 +467,77 @@ namespace backend_dotnet.Migrations
                     b.ToTable("users");
                 });
 
+            modelBuilder.Entity("backend_dotnet.Models.UserBadge", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BadgeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BadgeType")
+                        .IsRequired()
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EarnedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PointsAwarded")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("user_badges");
+                });
+
+            modelBuilder.Entity("backend_dotnet.Models.UserPoints", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BooksRead")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CurrentStreak")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastActivityDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LongestStreak")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReviewsWritten")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalPoints")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("user_points");
+                });
+
             modelBuilder.Entity("backend_dotnet.Models.BookHold", b =>
                 {
                     b.HasOne("backend_dotnet.Models.Book", "Book")
@@ -382,6 +548,25 @@ namespace backend_dotnet.Migrations
 
                     b.HasOne("backend_dotnet.Models.User", "User")
                         .WithMany("BookHolds")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("backend_dotnet.Models.BookReview", b =>
+                {
+                    b.HasOne("backend_dotnet.Models.Book", "Book")
+                        .WithMany("Reviews")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend_dotnet.Models.User", "User")
+                        .WithMany("BookReviews")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -436,6 +621,36 @@ namespace backend_dotnet.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("backend_dotnet.Models.ReadingList", b =>
+                {
+                    b.HasOne("backend_dotnet.Models.User", "User")
+                        .WithMany("ReadingLists")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("backend_dotnet.Models.ReadingListItem", b =>
+                {
+                    b.HasOne("backend_dotnet.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend_dotnet.Models.ReadingList", "ReadingList")
+                        .WithMany("Items")
+                        .HasForeignKey("ReadingListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("ReadingList");
+                });
+
             modelBuilder.Entity("backend_dotnet.Models.RoomReservation", b =>
                 {
                     b.HasOne("backend_dotnet.Models.Room", "Room")
@@ -457,16 +672,45 @@ namespace backend_dotnet.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("backend_dotnet.Models.UserBadge", b =>
+                {
+                    b.HasOne("backend_dotnet.Models.User", "User")
+                        .WithMany("Badges")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("backend_dotnet.Models.UserPoints", b =>
+                {
+                    b.HasOne("backend_dotnet.Models.User", "User")
+                        .WithOne("Points")
+                        .HasForeignKey("backend_dotnet.Models.UserPoints", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("backend_dotnet.Models.Book", b =>
                 {
                     b.Navigation("Holds");
 
                     b.Navigation("PendingRequests");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("backend_dotnet.Models.BorrowBookRequest", b =>
                 {
                     b.Navigation("OverdueFines");
+                });
+
+            modelBuilder.Entity("backend_dotnet.Models.ReadingList", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("backend_dotnet.Models.Room", b =>
@@ -481,11 +725,19 @@ namespace backend_dotnet.Migrations
 
             modelBuilder.Entity("backend_dotnet.Models.User", b =>
                 {
+                    b.Navigation("Badges");
+
                     b.Navigation("BookHolds");
+
+                    b.Navigation("BookReviews");
 
                     b.Navigation("Notifications");
 
                     b.Navigation("OverdueFines");
+
+                    b.Navigation("Points");
+
+                    b.Navigation("ReadingLists");
 
                     b.Navigation("Reservations");
                 });

@@ -1,10 +1,14 @@
 'use client';
 
+'use client';
+
 import React, { useState } from 'react';
 import { getBookCategoryLabel } from '@/lib/book-category';
 import { IBook } from '@/app/bookCatalog/types/interfaceBook';
 import Toast from '@/components/toast_notification';
 import type { BorrowMode } from '@/app/bookCatalog/services/api';
+import ReviewsSection from './reviews/ReviewsSection';
+import AddToListModal from '@/app/reading-lists/components/addToListModal';
 
 interface BookDetailModalProps {
   isOpen: boolean;
@@ -23,6 +27,7 @@ export default function BookDetailModal({
 }: BookDetailModalProps) {
   // ========== STATE MANAGEMENT ==========
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAddToListModalOpen, setIsAddToListModalOpen] = useState(false);
   const [toastConfig, setToastConfig] = useState({
     isVisible: false,
     title: '',
@@ -84,28 +89,26 @@ export default function BookDetailModal({
   return (
     <>
       <div
-        className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm transition-opacity duration-300"
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/70 p-4 transition-opacity duration-300"
         onClick={onClose}
       >
         <div data-aos="fade-in" data-aos-duration="300"
-          className="scrollbar-hidden relative max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-[2rem] border border-red-100 bg-white shadow-2xl"
+          className="scrollbar-hidden relative max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-none border border-[var(--catalog-border)] bg-[var(--catalog-panel)] shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="grid grid-cols-1 gap-0 md:grid-cols-[0.9fr_1.1fr]">
-            <div className="relative flex min-h-[28rem] items-center justify-center overflow-hidden bg-red-50 p-5">
-              <div className="absolute left-[-5rem] top-[-5rem] h-56 w-56 rounded-full bg-red-200/70 blur-3xl" />
-              <div className="absolute bottom-[-6rem] right-[-4rem] h-64 w-64 rounded-full bg-rose-100 blur-3xl" />
+            <div className="relative flex min-h-[28rem] items-center justify-center overflow-hidden bg-[var(--catalog-panel-muted)] p-5">
               <img
                 src={selectedBook.coverImage}
                 alt={selectedBook.title}
-                className="relative h-full max-h-[34rem] w-full rounded-[1.5rem] object-cover shadow-2xl shadow-red-950/10"
+                className="relative h-full max-h-[34rem] w-full rounded-[1.5rem] object-cover shadow-2xl shadow-amber-950/10"
               />
             </div>
 
             <div className="relative flex flex-col justify-between px-6 py-7 sm:px-8">
               <button
                 onClick={onClose}
-                className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-red-100 bg-white text-slate-500 shadow-sm transition-colors hover:bg-red-50 hover:text-red-700"
+                className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-[var(--catalog-border)] bg-[var(--catalog-panel)] text-[var(--catalog-text-muted)] shadow-sm transition-colors hover:bg-[var(--catalog-panel-muted)] hover:text-[var(--catalog-accent)]"
                 aria-label="Close modal"
               >
                 <i className="fa-solid fa-xmark text-xl"></i>
@@ -113,7 +116,7 @@ export default function BookDetailModal({
 
               <div className="pr-8">
                 <div className="mb-4 flex flex-wrap items-center gap-3">
-                  <span className="rounded-full border border-red-100 bg-red-50 px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-red-700">
+                  <span className="rounded-full border border-[var(--catalog-border)] bg-[var(--catalog-panel-muted)] px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-[var(--catalog-accent)]">
                     {getBookCategoryLabel(selectedBook.category)}
                   </span>
                   <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
@@ -125,12 +128,12 @@ export default function BookDetailModal({
                   {selectedBook.title}
                 </h2>
 
-                <p className="mb-6 text-xl font-black text-red-700">
+                <p className="mb-6 text-xl font-black text-[var(--catalog-accent)]">
                   By {selectedBook.author}
                 </p>
 
-                <div className="mb-8 flex items-center gap-2 rounded-2xl border border-red-100 bg-red-50/60 p-4">
-                  <i className="fa-solid fa-book text-lg text-red-500"></i>
+                <div className="mb-8 flex items-center gap-2 rounded-2xl border border-[var(--catalog-border)] bg-[var(--catalog-panel-muted)] p-4">
+                  <i className="fa-solid fa-book text-lg text-[var(--catalog-accent)]"></i>
                   <span className="font-bold text-slate-500">Status:</span>
                   {selectedBook.isAvailable ? (
                     <span className="flex items-center gap-1 font-black text-emerald-600">
@@ -138,7 +141,7 @@ export default function BookDetailModal({
                       Available for Request
                     </span>
                   ) : (
-                    <span className="flex items-center gap-1 font-black text-red-700">
+                    <span className="flex items-center gap-1 font-black text-[var(--catalog-accent)]">
                       <i className="fa-solid fa-circle-xmark text-sm"></i>
                       Currently Borrowed
                     </span>
@@ -155,38 +158,51 @@ export default function BookDetailModal({
                 </div>
               </div>
 
-              <div className="grid gap-3">
-                {selectedBook.isAvailable ? (
-                  <button
-                    onClick={() => handleAction('OFFLINE')}
-                    disabled={isSubmitting}
-                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-red-600 py-4 font-black text-white shadow-lg shadow-red-100 transition-all hover:bg-red-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {isSubmitting ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-book-bookmark"></i>}
-                    Borrow Offline
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => handleAction('HOLD')}
-                    disabled={isSubmitting}
-                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-red-600 py-4 font-black text-white shadow-lg shadow-red-100 transition-all hover:bg-red-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {isSubmitting ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-clock"></i>}
-                    Place Hold
-                  </button>
-                )}
+                <div className="grid grid-cols-2 gap-3">
+                  {selectedBook.isAvailable ? (
+                    <button
+                      onClick={() => handleAction('OFFLINE')}
+                      disabled={isSubmitting}
+                      className="catalog-accent-button col-span-2 flex items-center justify-center gap-2 rounded-2xl py-4 font-black transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {isSubmitting ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-book-bookmark"></i>}
+                      Borrow Offline
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleAction('HOLD')}
+                      disabled={isSubmitting}
+                      className="catalog-accent-button col-span-2 flex items-center justify-center gap-2 rounded-2xl py-4 font-black transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {isSubmitting ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-clock"></i>}
+                      Place Hold
+                    </button>
+                  )}
 
-                {hasOnlineAccess && (
                   <button
-                    onClick={() => handleAction('ONLINE')}
-                    disabled={isSubmitting}
-                    className="flex w-full items-center justify-center gap-2 rounded-2xl border border-red-200 py-4 font-black text-red-700 transition-all hover:bg-red-50 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+                    onClick={() => setIsAddToListModalOpen(true)}
+                    className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[var(--catalog-border)] bg-[var(--catalog-panel-muted)] py-4 font-black text-[var(--catalog-text-muted)] transition-all hover:bg-[var(--catalog-panel)] hover:text-[var(--catalog-accent)] active:scale-[0.98]"
                   >
-                    {isSubmitting ? <i className="fa-solid fa-spinner fa-spin"></i> : <i className="fa-solid fa-globe"></i>}
-                    Read Online
+                    <i className="fa-solid fa-bookmark text-amber-500"></i>
+                    Save to List
                   </button>
-                )}
-              </div>
+
+                  {hasOnlineAccess && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.location.href = `/reader?url=${encodeURIComponent(selectedBook.documentFileUrl || selectedBook.bookOnlineUrl || '')}`;
+                      }}
+                      className="catalog-outline-button flex w-full items-center justify-center gap-2 rounded-2xl py-4 font-black transition-all active:scale-[0.98]"
+                    >
+                      <i className="fa-solid fa-globe"></i>
+                      Read Online
+                    </button>
+                  )}
+                </div>
+
+              {/* Reviews Section */}
+              <ReviewsSection bookId={String(selectedBook.id)} bookIsbn={selectedBook.isbn} />
             </div>
           </div>
         </div>
@@ -201,6 +217,12 @@ export default function BookDetailModal({
         onClose={() =>
           setToastConfig((prev) => ({ ...prev, isVisible: false }))
         }
+      />
+
+      <AddToListModal
+        isOpen={isAddToListModalOpen}
+        onClose={() => setIsAddToListModalOpen(false)}
+        bookIsbn={selectedBook.isbn}
       />
     </>
   );

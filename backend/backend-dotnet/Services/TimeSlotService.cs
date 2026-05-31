@@ -11,9 +11,7 @@ public class TimeSlotService(
 {
     public async Task<IReadOnlyList<TimeSlotResponseDto>> GetAllAsync()
     {
-        var now = TimeOnly.FromDateTime(DateTime.Now);
         var timeSlots = await dbContext.TimeSlots
-            .Where(x => x.StartTime > now)
             .OrderBy(x => x.StartTime)
             .ToListAsync();
 
@@ -92,21 +90,8 @@ public class TimeSlotService(
 
     public async Task<int> DeleteExpiredUnusedAsync(CancellationToken cancellationToken = default)
     {
-        var now = TimeOnly.FromDateTime(DateTime.Now);
-        var expiredTimeSlots = await dbContext.TimeSlots
-            .Where(x => x.StartTime <= now && !x.Reservations.Any())
-            .ToListAsync(cancellationToken);
-
-        if (expiredTimeSlots.Count == 0)
-        {
-            return 0;
-        }
-
-        dbContext.TimeSlots.RemoveRange(expiredTimeSlots);
-        await dbContext.SaveChangesAsync(cancellationToken);
-
-        logger.LogInformation("Deleted {TimeSlotCount} expired unused time slots.", expiredTimeSlots.Count);
-        return expiredTimeSlots.Count;
+        await Task.CompletedTask;
+        return 0;
     }
 
     private static TimeSlotResponseDto MapToResponse(TimeSlot timeSlot)

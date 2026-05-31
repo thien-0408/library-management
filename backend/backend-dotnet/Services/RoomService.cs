@@ -16,15 +16,13 @@ public class RoomService(
         return rooms.Select(MapToResponse).ToList();
     }
 
-    public async Task<IReadOnlyList<RoomAvailabilityResponseDto>> GetAvailabilityAsync(DateOnly date, Guid timeSlotId)
+    public async Task<IReadOnlyList<RoomAvailabilityResponseDto>> GetAvailabilityAsync(Guid timeSlotId)
     {
         var timeSlot = await dbContext.TimeSlots.FirstOrDefaultAsync(x => x.Id == timeSlotId);
         if (timeSlot is null)
         {
             throw new KeyNotFoundException("Time slot not found.");
         }
-
-        ValidateAvailabilityDate(date, timeSlot.StartTime);
 
         var rooms = await dbContext.Rooms.ToListAsync();
         var responses = new List<RoomAvailabilityResponseDto>();
@@ -34,7 +32,6 @@ public class RoomService(
             var bookedCount = await dbContext.RoomReservations.CountAsync(x =>
                 x.RoomId == room.Id &&
                 x.TimeSlotId == timeSlotId &&
-                x.BookingDate == date &&
                 x.ReservationStatus == ReservationStatus.SCHEDULING);
 
             responses.Add(new RoomAvailabilityResponseDto
@@ -51,15 +48,13 @@ public class RoomService(
         return responses;
     }
 
-    public async Task<IReadOnlyList<RoomOccupancyResponseDto>> GetOccupancyAsync(DateOnly date, Guid timeSlotId)
+    public async Task<IReadOnlyList<RoomOccupancyResponseDto>> GetOccupancyAsync(Guid timeSlotId)
     {
         var timeSlot = await dbContext.TimeSlots.FirstOrDefaultAsync(x => x.Id == timeSlotId);
         if (timeSlot is null)
         {
             throw new KeyNotFoundException("Time slot not found.");
         }
-
-        ValidateOccupancyDate(date, timeSlot.EndTime);
 
         var rooms = await dbContext.Rooms.ToListAsync();
         var responses = new List<RoomOccupancyResponseDto>();
@@ -69,7 +64,6 @@ public class RoomService(
             var bookedCount = await dbContext.RoomReservations.CountAsync(x =>
                 x.RoomId == room.Id &&
                 x.TimeSlotId == timeSlotId &&
-                x.BookingDate == date &&
                 (x.ReservationStatus == ReservationStatus.SCHEDULING || x.ReservationStatus == ReservationStatus.CONFIRMED));
 
             responses.Add(new RoomOccupancyResponseDto
@@ -146,38 +140,6 @@ public class RoomService(
         await dbContext.SaveChangesAsync();
 
         logger.LogInformation("Deleted room {RoomId}.", room.Id);
-    }
-
-    private static void ValidateAvailabilityDate(DateOnly date, TimeOnly startTime)
-    {
-        var today = DateOnly.FromDateTime(DateTime.Now);
-        var now = TimeOnly.FromDateTime(DateTime.Now);
-
-        if (date < today)
-        {
-            throw new InvalidOperationException("Booking date cannot be in the past.");
-        }
-
-        if (date == today && startTime <= now)
-        {
-            throw new InvalidOperationException("Booking time is no longer valid for today.");
-        }
-    }
-
-    private static void ValidateOccupancyDate(DateOnly date, TimeOnly endTime)
-    {
-        var today = DateOnly.FromDateTime(DateTime.Now);
-        var now = TimeOnly.FromDateTime(DateTime.Now);
-
-        if (date < today)
-        {
-            throw new InvalidOperationException("Booking date cannot be in the past.");
-        }
-
-        if (date == today && endTime < now)
-        {
-            throw new InvalidOperationException("Booking time is no longer valid for today.");
-        }
     }
 
     private static RoomResponseDto MapToResponse(Room room)
