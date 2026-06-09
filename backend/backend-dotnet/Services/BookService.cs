@@ -16,7 +16,7 @@ public class BookService(
     {
         var book = await dbContext.Books
             .Include(x => x.Reviews)
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .FirstOrDefaultAsync(x => x.Id == id && x.IsActive);
         if (book is null)
         {
             throw new KeyNotFoundException("Book not found.");
@@ -27,7 +27,7 @@ public class BookService(
 
     public async Task<PagedResultDto<BookResponseDto>> SearchAsync(GetBooksQueryDto query)
     {
-        var books = dbContext.Books.AsQueryable();
+        var books = dbContext.Books.Where(x => x.IsActive).AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(query.Isbn))
         {
@@ -122,7 +122,7 @@ public class BookService(
     public async Task<BookResponseDto> UpdateByIsbnAsync(string isbn, UpdateBookRequestDto request)
     {
         var normalizedIsbn = isbn.Trim();
-        var book = await dbContext.Books.FirstOrDefaultAsync(x => x.Isbn == normalizedIsbn);
+        var book = await dbContext.Books.FirstOrDefaultAsync(x => x.Isbn == normalizedIsbn && x.IsActive);
         if (book is null)
         {
             throw new KeyNotFoundException("Book not found.");
@@ -183,16 +183,16 @@ public class BookService(
     public async Task DeleteByIsbnAsync(string isbn)
     {
         var normalizedIsbn = isbn.Trim();
-        var book = await dbContext.Books.FirstOrDefaultAsync(x => x.Isbn == normalizedIsbn);
+        var book = await dbContext.Books.FirstOrDefaultAsync(x => x.Isbn == normalizedIsbn && x.IsActive);
         if (book is null)
         {
             throw new KeyNotFoundException("Book not found.");
         }
 
-        dbContext.Books.Remove(book);
+        book.IsActive = false;
         await dbContext.SaveChangesAsync();
 
-        logger.LogInformation("Deleted book with ISBN {Isbn}.", normalizedIsbn);
+        logger.LogInformation("Archived book with ISBN {Isbn}.", normalizedIsbn);
     }
 
     private static void ApplyAvailability(Book book, int availableCopies)

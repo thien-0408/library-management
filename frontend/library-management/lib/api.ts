@@ -12,7 +12,7 @@ type RequestOptions = Omit<RequestInit, 'body'> & {
   body?: unknown;
 };
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const MIN_API_DELAY_MS = 500;
 const AUTH_STORAGE_KEYS = {
   accessToken: 'accessToken',
@@ -33,6 +33,10 @@ export const getJwtPayload = (token: string) => {
 };
 
 const buildUrl = (path: string, params?: RequestOptions['params']) => {
+  if (!API_BASE_URL) {
+    throw new Error('NEXT_PUBLIC_API_BASE_URL is not configured.');
+  }
+
   const url = new URL(path, API_BASE_URL);
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -46,6 +50,10 @@ const buildUrl = (path: string, params?: RequestOptions['params']) => {
 
 export const resolveAssetUrl = (path?: string | null) => {
   if (!path) return null;
+
+  if (!API_BASE_URL) {
+    throw new Error('NEXT_PUBLIC_API_BASE_URL is not configured.');
+  }
 
   if (/^https?:\/\//i.test(path)) {
     const url = new URL(path);
@@ -64,9 +72,9 @@ export const resolveAssetUrl = (path?: string | null) => {
 
 export class ApiError extends Error {
   status: number;
-  data: any;
+  data: unknown;
 
-  constructor(message: string, status: number, data: any) {
+  constructor(message: string, status: number, data: unknown) {
     super(message);
     this.name = 'ApiError';
     this.status = status;

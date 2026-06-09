@@ -84,7 +84,7 @@ Route prefix: `/api/books`
 | `GET` | `/api/books` | None | `GetBooksQueryDto` query | `PagedResultDto<BookResponseDto>` | Supports filters and pagination |
 | `POST` | `/api/books` | Admin | `CreateBookRequestDto` form | `BookResponseDto` | Optional image/document upload and online URL |
 | `PUT` | `/api/books/{isbn}` | Admin | `UpdateBookRequestDto` form | `BookResponseDto` | Updates by ISBN |
-| `DELETE` | `/api/books/{isbn}` | Admin | none | `204 No Content` | Deletes by ISBN |
+| `DELETE` | `/api/books/{isbn}` | Admin | none | `204 No Content` | Archives by ISBN (soft delete) |
 
 DTOs: `DTOs/Books`
 
@@ -97,6 +97,7 @@ Notes:
 
 - `GET` uses GUID id; update/delete use ISBN.
 - `GET /api/books` is the book/document search endpoint. It supports `Isbn`, `Title`, `Author`, `Category`, `DocumentType`, `Page`, and `PageSize` query filters.
+- `DELETE /api/books/{isbn}` is a soft delete. Archived books are hidden from normal list/detail flows and cannot receive new borrow or hold requests.
 - If returned copies make a book available, the next waiting hold is notified.
 
 ## Borrow Book Requests

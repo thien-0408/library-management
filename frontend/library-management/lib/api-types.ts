@@ -68,10 +68,13 @@ export type BadgeDto = {
 };
 
 export type GamificationLeaderboardDto = {
+  rank: number;
   userId: string;
   userName: string;
+  avatarUrl?: string | null;
   totalPoints: number;
-  rank: number;
+  booksRead: number;
+  badgeCount: number;
 };
 
 export type DashboardStatsResponseDto = {

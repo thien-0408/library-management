@@ -36,6 +36,9 @@ public class Book
     [Required]
     public DocumentType DocumentType { get; set; }
 
+    [Required]
+    public bool IsActive { get; set; } = true;
+
     public ICollection<BorrowBookRequest> PendingRequests { get; set; } = new List<BorrowBookRequest>();
 
     public ICollection<BookHold> Holds { get; set; } = new List<BookHold>();

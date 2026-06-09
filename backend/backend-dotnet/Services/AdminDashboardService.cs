@@ -14,7 +14,7 @@ public class AdminDashboardService(LibraryManagementDbContext dbContext, IFineSe
         return new DashboardStatsResponseDto
         {
             ActiveUsers = await dbContext.Users.CountAsync(x => x.IsActive),
-            TotalBooks = await dbContext.Books.CountAsync(),
+            TotalBooks = await dbContext.Books.CountAsync(x => x.IsActive),
             BorrowedBooks = await dbContext.BorrowBookRequests.CountAsync(x => x.Status == BookPendingStatus.APPROVED),
             OverdueBooks = await dbContext.BorrowBookRequests.CountAsync(x => x.Status == BookPendingStatus.APPROVED && x.DueDate.HasValue && x.DueDate.Value < DateTime.UtcNow),
             PendingBorrowRequests = await dbContext.BorrowBookRequests.CountAsync(x => x.Status == BookPendingStatus.PENDING),

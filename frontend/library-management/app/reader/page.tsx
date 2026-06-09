@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense, useState } from 'react'
+import { API_BASE_URL } from '@/lib/api'
 
 function ReaderContent() {
   const router = useRouter()
@@ -10,8 +11,7 @@ function ReaderContent() {
   const [isHovered, setIsHovered] = useState(false)
 
   // Resolve the URL: if it's a relative path starting with '/', prepend the backend API URL
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5273'
-  const url = rawUrl?.startsWith('/') ? `${baseUrl}${rawUrl}` : rawUrl
+  const url = rawUrl?.startsWith('/') && API_BASE_URL ? `${API_BASE_URL}${rawUrl}` : rawUrl
 
   return (
     <div style={{

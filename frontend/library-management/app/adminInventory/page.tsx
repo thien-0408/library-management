@@ -93,7 +93,7 @@ export default function AdminInventoryPage() {
     const success = await handleDeleteBook(bookToDelete);
     if (success) {
       setBookToDelete(null);
-      addNotification('Book Removed', 'The book has been deleted from inventory.', 'info');
+      addNotification('Book Archived', 'The book has been archived and removed from inventory.', 'info');
     }
   };
 
@@ -191,9 +191,9 @@ export default function AdminInventoryPage() {
 
       <ConfirmModal
         isOpen={Boolean(bookToDelete)}
-        title="Delete this book?"
-        description="This will remove the book from inventory. This action cannot be undone."
-        confirmLabel="Delete book"
+        title="Archive this book?"
+        description="This will archive the book and hide it from inventory and catalog listings. Borrow history will be kept."
+        confirmLabel="Archive book"
         variant="danger"
         onCancel={() => setBookToDelete(null)}
         onConfirm={() => void onDeleteBook()}

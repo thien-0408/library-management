@@ -68,7 +68,7 @@ public class BorrowBookRequestService(
         }
 
         var normalizedIsbn = request.BookIsbn.Trim();
-        var book = await dbContext.Books.FirstOrDefaultAsync(x => x.Isbn == normalizedIsbn);
+        var book = await dbContext.Books.FirstOrDefaultAsync(x => x.Isbn == normalizedIsbn && x.IsActive);
         if (book is null)
         {
             throw new KeyNotFoundException("Book not found.");
@@ -229,7 +229,12 @@ public class BorrowBookRequestService(
 
         if (request.Status == BookPendingStatus.APPROVED)
         {
-            if (borrowRequest.Book is null || !borrowRequest.Book.AvailableCopies.HasValue || borrowRequest.Book.AvailableCopies.Value <= 0)
+            if (borrowRequest.Book is null || !borrowRequest.Book.IsActive)
+            {
+                throw new InvalidOperationException("Book is no longer available.");
+            }
+
+            if (!borrowRequest.Book.AvailableCopies.HasValue || borrowRequest.Book.AvailableCopies.Value <= 0)
             {
                 throw new InvalidOperationException("Book is out of stock.");
             }

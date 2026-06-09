@@ -45,7 +45,7 @@ public class BookHoldService(
         }
 
         var isbn = request.BookIsbn.Trim();
-        var book = await dbContext.Books.FirstOrDefaultAsync(x => x.Isbn == isbn);
+        var book = await dbContext.Books.FirstOrDefaultAsync(x => x.Isbn == isbn && x.IsActive);
         if (book is null)
         {
             throw new KeyNotFoundException("Book not found.");

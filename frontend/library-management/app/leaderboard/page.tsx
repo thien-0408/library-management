@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import Header from '@/components/header';
 import { gamificationApi } from '@/lib/gamification-api';
+import { resolveAssetUrl } from '@/lib/api';
 import type { GamificationLeaderboardDto } from '@/lib/api-types';
 import { useToast } from '@/hooks/useToast';
 import Toast from '@/components/toast_notification';
@@ -50,7 +52,7 @@ export default function LeaderboardPage() {
           {isLoading ? (
             <div className="flex flex-col gap-4 animate-pulse">
               {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-20 bg-surface-variant rounded-2xl w-full"></div>
+                <div key={i} className="h-24 bg-surface-variant rounded-2xl w-full"></div>
               ))}
             </div>
           ) : leaderboard.length === 0 ? (
@@ -59,7 +61,10 @@ export default function LeaderboardPage() {
             </div>
           ) : (
             <div className="flex flex-col gap-4">
-              {leaderboard.map((user, index) => (
+              {leaderboard.map((user, index) => {
+                const avatarUrl = resolveAssetUrl(user.avatarUrl);
+
+                return (
                 <div 
                   key={user.userId} 
                   className={`flex items-center gap-4 p-4 md:p-6 rounded-2xl transition-all duration-300 hover:scale-[1.01] hover:shadow-md
@@ -72,7 +77,24 @@ export default function LeaderboardPage() {
                   <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-surface shadow-sm font-bold text-lg text-primary">
                     #{user.rank}
                   </div>
-                  
+
+                  <div className="flex-shrink-0">
+                    {avatarUrl ? (
+                      <Image
+                        src={avatarUrl}
+                        alt={`${user.userName}'s avatar`}
+                        width={64}
+                        height={64}
+                        unoptimized
+                        className="h-14 w-14 rounded-full border-2 border-white object-cover shadow-sm md:h-16 md:w-16"
+                      />
+                    ) : (
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-white bg-primary-container text-xl font-bold text-primary shadow-sm md:h-16 md:w-16">
+                        {user.userName.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                   
                   <div className="flex-grow">
                     <h3 className="text-xl font-bold text-on-surface flex items-center gap-2">
                       {user.userName}
@@ -91,7 +113,8 @@ export default function LeaderboardPage() {
                     </span>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
